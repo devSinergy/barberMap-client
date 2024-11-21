@@ -17,8 +17,8 @@
     
     <!-- Enlaces de navegación para pantallas grandes -->
     <div class="hidden lg:flex space-x-6">
-      <a href="/" class="hover:text-gray-400">Home</a>
-      <a href="/products" class="hover:text-gray-400">Products</a>
+      <a href="/barbershops" class="hover:text-gray-400">Barberias</a>
+      <a href="/haircuts" class="hover:text-gray-400">Peinados</a>
       <a href="/about-us" class="hover:text-gray-400">About Us</a>
     </div>
     

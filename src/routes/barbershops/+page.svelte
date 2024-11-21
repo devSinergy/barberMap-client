@@ -2,7 +2,7 @@
     import NavBar from "$lib/components/navBar/navBar.svelte";
     import "/src/global.css";
     let barbershop1 = "/images/barberShops/barberia.jpg"
-    export let data; // Recibe los datos de barberos desde el load()
+    export let data // Recibe los datos de barberos desde el load()
     const { barberShops} = data
 </script>
 <main>

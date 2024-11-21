@@ -1,4 +1,4 @@
-import api from "../axios";
+import api from "../axiosBarbers";
 
 export const getBarbers = async () => {
     try {
