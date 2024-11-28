@@ -11,3 +11,14 @@ export const getBarberShops = async() =>{
         throw error; 
     }
 }
+
+export const getStoreOne = async(/** @type {any} */ id) =>{
+    try {
+        
+        const response = await apiStores.get(`/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error al obtener los detalles de la barbería:', error);
+        throw error;
+    }
+}
