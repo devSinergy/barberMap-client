@@ -1,4 +1,9 @@
 <script>
+  let menuOpen = false; // Variable para controlar si el menú está abierto o cerrado
+
+  function toggleMenu() {
+    menuOpen = !menuOpen; // Cambia el estado de visibilidad
+  }
 </script>
 
 <main class="bg-gray-900 text-white px-6 py-4">
@@ -7,7 +12,7 @@
     
     <!-- Menú hamburguesa -->
     <div class="lg:hidden">
-      <button class="p-2 text-white hover:bg-gray-800 rounded">
+      <button class="p-2 text-white hover:bg-gray-800 rounded" on:click={toggleMenu}>
         <!-- Ícono de menú (hamburguesa) -->
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -23,7 +28,8 @@
     </div>
     
     <!-- Logo en el centro -->
-    <div >      
+    <div>
+      <!-- Aquí puedes agregar un logo si lo necesitas -->
     </div>
     
     <!-- Ícono de búsqueda -->
@@ -38,4 +44,11 @@
     </div>
     
   </nav>
+
+  <!-- Menú desplegable en dispositivos móviles -->
+  <div class={`lg:hidden ${menuOpen ? 'block' : 'hidden'} mt-4`}>
+    <a href="/barbershops" class="block py-2 hover:bg-gray-800">Barberias</a>
+    <a href="/haircuts" class="block py-2 hover:bg-gray-800">Peinados</a>
+    <a href="/about-us" class="block py-2 hover:bg-gray-800">About Us</a>
+  </div>
 </main>

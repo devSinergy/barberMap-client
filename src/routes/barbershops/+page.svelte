@@ -30,17 +30,18 @@
     <NavBar />
     
     <section class="p-6 bg-gray-100">
-        <form class="mb-6 flex flex-wrap gap-4 items-center bg-white p-4 rounded-lg shadow-md">
-            <input 
-              type="text" 
-              bind:value={filters.codigoPostal} 
-              placeholder="Código Postal"
-              class="p-2 border rounded w-48"
-            />
-            <input 
+        <form class="mb-6 flex flex-wrap gap-4 items-center bg-white p-4 rounded-lg shadow-md lg:gap-[200px]">
+            
+           <input 
               type="text" 
               bind:value={filters.nombre} 
               placeholder="Nombre de la barbería"
+              class="p-2 border rounded w-48"
+            />
+          <input 
+              type="text" 
+              bind:value={filters.codigoPostal} 
+              placeholder="Código Postal"
               class="p-2 border rounded w-48"
             />
             <select 
@@ -54,7 +55,7 @@
             <button type="button" on:click={resetFilters} class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
               Limpiar
             </button>
-          </form>
+        </form>
 
           <h1 class="text-2xl font-bold text-center mb-6">Lista de Barberías</h1>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
@@ -65,7 +66,7 @@
                   <img 
                     src={barbershop.cover} 
                     alt="barbershop" 
-                    class="w-full h-[400px] object-cover transition-opacity duration-300 group-hover:opacity-50"
+                    class="w-full h-[400px] object-cover transition-opacity duration-300 group-hover:opacity-50 p-2"
                   />
                   <!-- Contenido -->
                   <div class="absolute text-center inset-0 p-4 bg-black bg-opacity-90 flex flex-col justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">

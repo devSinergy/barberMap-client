@@ -2,12 +2,12 @@
     import NavBar from "$lib/components/navBar/navBar.svelte";
     import Carousel from "$lib/components/carrousel/carousel.svelte";
     export let data ;
-    const {detailStore,services} = data
+    const {detailStore,services,calendar} = data
     import "/src/global.css";
     let activeTab = 'info';  
+    console.log(calendar)
     console.log(services)
-    console.log(detailStore)
-
+    
 </script>
 <main>
     <NavBar/>
@@ -32,17 +32,57 @@
     </nav>
     <section>
         {#if activeTab === 'info'}
+        <div class="text-2xl text-center mt-4 mb-4 font-serif font-semibold underline underline-offset-8">
+          <h2>Información</h2>
+        </div>
         <div class="flex flex-col lg:flex-row">
-            <div class="w-full lg:w-1/2 p-4">
-              <h2 class="text-xl font-semibold">{detailStore.name}</h2>
-              <p class="mt-2">{detailStore.postalcode}</p>
-            </div> 
-          
+            <div>
+              <div class="w-full lg:w-1/2 p-4 text-center">
+                <h2 class="text-xl font-semibold">{detailStore.name}</h2>
+                <p class="mt-2">{detailStore.addres},  {detailStore.postalcode}</p>
+                <p class="mt-2">{detailStore.phonenumber}</p>
+              </div> 
+              <div class="overflow-x-auto p-4">
+                <table class="min-w-full table-auto bg-white shadow-md rounded-lg">
+                    <thead class="bg-gray-800 text-white">
+                        <tr>
+                            <th class="px-4 py-2 text-left">Día</th>
+                            <th class="px-4 py-2 text-left">Mañana</th>
+                            <th class="px-4 py-2 text-left">Tarde</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {#each ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"] as dia}
+                            <tr class="border-b hover:bg-gray-100">
+                                <td class="px-4 py-2 text-sm">{dia}</td>
+                                {#each calendar as horario}
+                                    <td class="px-4 py-2 text-sm">
+                                        {horario.general[0].open} - {horario.general[0].close} <!-- Mañana -->
+                                    </td>
+                                    <td class="px-4 py-2 text-sm">
+                                        {horario.general[1].open} - {horario.general[1].close} <!-- Tarde -->
+                                    </td>
+                                {/each}
+                            </tr>
+                        {/each}
+                        {#if calendar[0].sunday === true}
+                            <tr class="border-b hover:bg-gray-100">
+                                <td class="px-4 py-2 text-sm">Domingo</td>
+                                <td class="px-4 py-2 text-sm" colspan="2">Cerrado</td>
+                            </tr>
+                        {/if}
+                    </tbody>
+                </table>
+            </div>
+            </div>
             <div class="w-full lg:w-1/2 p-4">
               <Carousel images={detailStore.images} />
             </div>
         </div>
         {:else if activeTab === 'services'}
+        <div class="text-2xl text-center mt-4 mb-4 font-serif font-semibold underline underline-offset-8">
+          <h2>Servicios</h2>
+        </div>
         <div class="flex flex-wrap justify-center lg:justify-start gap-6 mt-6 px-4">
           {#each services as service}
             <div class="bg-white shadow-lg rounded-lg overflow-hidden w-full sm:w-64">
@@ -62,9 +102,7 @@
             </div>
           {/each}
         </div>
-        <div>
-
-        </div>
+        
         {/if} 
       </section>
 </main>
