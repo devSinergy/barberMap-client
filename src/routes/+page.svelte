@@ -3,6 +3,7 @@
   let background = "/images/backgrounds/barber1.jpg";
   let showModal = true;
   let postalCode = "";
+  import "/src/global.css";
 
   function searchBarberShop() {
     if (postalCode.trim() !== "") {
