@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiCalendar = axios.create({
-    baseURL:'http://localhost:3000/calendar',
+    baseURL:'https://barbermap-server.onrender.com/calendar',
     timeout:5000,
     headers:{
         'Content-Type':'application/json'

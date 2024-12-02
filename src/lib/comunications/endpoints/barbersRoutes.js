@@ -10,3 +10,13 @@ export const getBarbers = async () => {
         throw error; // Propaga el error para manejarlo en niveles superiores
     }
 };
+
+export const getBarber = async (/** @type {any} */ id) =>{
+    try {
+        const response = await api.get(`/${id}`);
+        return response.data
+    } catch (error) {
+        console.error('Error al obtener detalles del barbero', error);
+        throw error;
+    }
+}   

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiService = axios.create({
-    baseURL:'http://localhost:3000/services',
+    baseURL:'https://barbermap-server.onrender.com/services',
     timeout:5000,
     headers:{
         'Content-Type':'application/json'

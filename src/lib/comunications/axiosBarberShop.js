@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const apiStores = axios.create({
-    baseURL:'http://localhost:3000/barbershops',
+    baseURL:'https://barbermap-server.onrender.com/barbershops',
     timeout: 5000,
     headers:{
         'Content-Type':'application/json'

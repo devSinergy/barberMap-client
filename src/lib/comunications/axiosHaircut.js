@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiHaircut = axios.create({
-    baseURL:'http://localhost:3000/haircut',
+    baseURL:'https://barbermap-server.onrender.com/haircut',
     timeout:5000,
     headers:{
         'Content-Type':'application/json'

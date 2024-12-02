@@ -30,7 +30,7 @@
     <NavBar />
     
     <section class="p-6 bg-gray-100">
-        <form class="mb-6 flex flex-wrap gap-4 items-center bg-white p-4 rounded-lg shadow-md lg:gap-[200px]">
+        <form class="mb-6 flex flex-col gap-6 items-start bg-white p-4 rounded-lg shadow-md lg:gap-[200px] lg:flex-row">
             
            <input 
               type="text" 
