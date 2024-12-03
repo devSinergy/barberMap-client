@@ -32,14 +32,14 @@
     <!-- Botones de navegación con círculos completos -->
     <button
       on:click={prevImage}
-      class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-amber text-black w-12 h-12 ml-2 flex items-center justify-center rounded-full"
+      class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-blue/70 text-white w-12 h-12 ml-2 flex items-center justify-center rounded-full"
     >
       <span class="text-2xl">&#8592;</span>
       <!-- Flecha hacia la izquierda -->
     </button>
     <button
       on:click={nextImage}
-      class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-amber text-black w-12 h-12 mr-2 flex items-center justify-center rounded-full"
+      class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-blue/70 text-white w-12 h-12 mr-2 flex items-center justify-center rounded-full"
     >
       <span class="text-2xl">&#8594;</span>
       <!-- Flecha hacia la derecha -->

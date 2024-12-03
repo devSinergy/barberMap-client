@@ -6,7 +6,9 @@
   }
 </script>
 
-<main class="bg-coffee text-sand px-6 py-4">
+<main
+  class="bg-black/85 text-white/80 px-6 py-4 border-2 border-l-0 border-r-0 border-t-0 border-gray-400"
+>
   <!-- Contenedor principal de la navbar -->
   <nav class="flex items-center justify-between">
     <!-- Menú hamburguesa -->

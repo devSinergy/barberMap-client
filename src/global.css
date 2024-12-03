@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  background-color: #fccc7c;
+  background-color: #f5f5f5;
 }
 .uppercase-first-only {
   text-transform: uppercase; /* Todas las letras mayúsculas */
