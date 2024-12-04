@@ -60,7 +60,7 @@
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
             {#if filteredBarberShops.length > 0}
               {#each filteredBarberShops as barbershop}
-                <div class="relative rounded-lg shadow-lg overflow-hidden bg-white group">
+                <div class="steam1  top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 relative rounded-lg shadow-lg overflow-hidden bg-white group">
                   <!-- Imagen -->
                   <img 
                     src={barbershop.cover} 

@@ -1,3 +1,127 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.steam {
+    background: linear-gradient(0deg, #000, #272727);
+    width: 20.5em;
+    height: 21.6em;
+  }
+  
+  .steam:before,
+  .steam:after {
+    content: "";
+    position: absolute;
+    left: -2px;
+    right: -1px;
+    top: -1px;
+    background: linear-gradient(
+      30deg,
+      #0000ff,
+      #ff0000,
+      #ffffff,
+      #0000ff,
+      #ff0000,
+      #ffffff,
+      #0000ff
+    );
+    background-size: 180%;
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    z-index: -1;
+    animation: steam 20s linear infinite;
+    border-radius: 10px;
+  }
+  
+  @keyframes steam {
+    0% {
+      background-position: 0 0;
+    }
+    50% {
+      background-position: 400% 0;
+    }
+    100% {
+      background-position: 0 0;
+    }
+  }
+  
+  .steam:after {
+    filter: blur(20px);
+  }
+
+  .steam1 {
+    background: linear-gradient(0deg, #000, #272727);
+    width: 20.5em;
+    height: 21.6em;
+  }
+  
+  .steam1:before,
+  .steam1:after {
+    content: "";
+    position: absolute;
+    left: -2px;
+    right: -1px;
+    top: -1px;
+    background: linear-gradient(
+      30deg,
+      #2e2e2f,
+      #929191,
+      #ffffff,
+      #2e2e2f,
+      #929191,
+      #ffffff,
+      #2e2e2f
+    );
+    background-size: 180%;
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    z-index: -1;
+    animation: steam 20s linear infinite;
+    border-radius: 10px;
+  }
+  
+  @keyframes steam1 {
+    0% {
+      background-position: 0 0;
+    }
+    50% {
+      background-position: 400% 0;
+    }
+    100% {
+      background-position: 0 0;
+    }
+  }
+  
+  .steam1:after {
+    filter: blur(20px);
+  }
+
+  .gradient-border {
+    position: relative;
+    display: inline-block;
+    border-radius: 12px; /* Ajusta según tu diseño */
+    padding: 4px; /* Espacio para el borde */
+    background: linear-gradient(30deg, #2e2e2f, #929191, #ffffff, #2e2e2f);
+    background-size: 200%;
+    animation: gradient-animation 5s linear infinite;
+  }
+  
+  .gradient-border img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 10px; /* Asegúrate de que coincida con el contorno del borde */
+  }
+  
+  @keyframes gradient-animation {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
