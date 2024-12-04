@@ -1,6 +1,7 @@
 <script>
     import NavBar from "$lib/components/navBar/navBar.svelte";
     export let data;
+    import "/src/global.css";
     import { goto } from '$app/navigation';
     const {haircuts} = data
     import { getBarber } from "$lib/comunications/endpoints/barbersRoutes.js";

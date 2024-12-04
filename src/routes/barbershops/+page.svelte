@@ -1,4 +1,5 @@
 <script>
+    import "/src/global.css";
     import NavBar from "$lib/components/navBar/navBar.svelte";
     import { goto } from '$app/navigation';
     export let data // Recibe los datos de barberos desde el load()

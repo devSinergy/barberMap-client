@@ -1,4 +1,5 @@
 <script>
+  import "/src/global.css";
   import { goto } from "$app/navigation";
   let background = "/images/backgrounds/barber1.jpg";
   let showModal = true;

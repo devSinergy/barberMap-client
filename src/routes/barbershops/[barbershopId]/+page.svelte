@@ -3,7 +3,7 @@
     import Carousel from "$lib/components/carrousel/carousel.svelte";
     export let data ;
     const {detailStore,services,calendar} = data
-    import "/src/global.css";
+    // import "/src/global.css";
     let activeTab = 'info';  
     console.log(calendar)
     console.log(services)
