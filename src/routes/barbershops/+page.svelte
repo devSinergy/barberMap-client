@@ -1,9 +1,34 @@
 <script>
+// @ts-nocheck
+
     import "/src/global.css";
     import NavBar from "$lib/components/navBar/navBar.svelte";
     import { goto } from '$app/navigation';
     export let data // Recibe los datos de barberos desde el load()
     const { barberShops, codigoPostal} = data;
+    import { getStoreReview } from "$lib/comunications/endpoints/reviewsRoutes.js";
+    let reviews = {};
+    const fetchReviews = async (/** @type {string | number} */ id) => {
+    try {
+      const review = await getStoreReview(id);
+      // @ts-ignore
+      reviews[id] = review; // Guarda la reseña en un objeto con el ID como clave
+    } catch (error) {
+      console.error('Error fetching reviews:', error);
+    }
+  };
+  /**
+   * @type {string | any[]}
+   */
+   export let filteredBarberShops = [];
+  $: {
+    for (const barbershop of filteredBarberShops) {
+      // @ts-ignore
+      if (!reviews[barbershop._id]) {
+        fetchReviews(barbershop._id);
+      }
+    }
+  }
     
     let filters = {
     codigoPostal,
@@ -83,6 +108,24 @@
                       <h2 class="text-xl pb-4 text-white font-semibold">{barbershop.name}</h2>
                         <p class="text-sm text-white mb-4 underline underline-offset-8 "> {barbershop.addres}</p>
                         <p class="text-sm text-white"> {barbershop.phonenumber}</p>
+                        {#if reviews[barbershop._id]?.promedio}
+                        <p class="text-sm text-white mt-4 flex justify-center items-center">
+                           <span class="ml-2 flex ">
+                            {#each Array(5) as _, index}
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                                class="w-5 h-5 {index < Math.round(reviews[barbershop._id].promedio) ? 'text-yellow-500' : 'text-gray-300'}"
+                              >
+                                <path d="M12 .587l3.668 7.429 8.2 1.179-5.917 5.761 1.396 8.144L12 18.897l-7.347 3.873 1.396-8.144-5.917-5.761 8.2-1.179z" />
+                              </svg>
+                            {/each}
+                          </span>
+                        </p>
+                      {:else}
+                        <p class="text-sm text-white mt-4">No hay reseñas disponibles.</p>
+                      {/if}
                       <button class="bg-white rounded-lg p-2 mt-6 font-bold" on:click={() => goto(`/barbershops/${barbershop._id}`)}>Visitar</button>
                     </div>
                     

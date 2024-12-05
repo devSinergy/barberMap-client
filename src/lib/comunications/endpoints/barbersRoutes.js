@@ -2,12 +2,11 @@ import api from "../axiosBarbers";
 
 export const getBarbers = async () => {
     try {
-        const response = await api.get('/'); // Realiza la solicitud al endpoint base
-        console.log('Datos de barberos obtenidos:', response.data); // Log de los datos recibidos
-        return response.data; // Retorna solo los datos
+        const response = await api.get('/'); 
+        return response.data; 
     } catch (error) {
-        console.error('Error al obtener barberos:', error); // Log de cualquier error que ocurra
-        throw error; // Propaga el error para manejarlo en niveles superiores
+        console.error('Error al obtener barberos:', error); 
+        throw error;
     }
 };
 

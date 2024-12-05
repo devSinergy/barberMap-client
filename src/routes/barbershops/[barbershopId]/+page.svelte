@@ -2,8 +2,8 @@
     import NavBar from "$lib/components/navBar/navBar.svelte";
     import Carousel from "$lib/components/carrousel/carousel.svelte";
     export let data ;
-    const {detailStore,services,calendar} = data
-    // import "/src/global.css";
+    const {detailStore,services,calendar,reviews} = data
+    import "/src/global.css";
     let activeTab = 'info';  
     console.log(calendar)
     console.log(services)
@@ -41,6 +41,24 @@
                 <h2 class="text-xl font-semibold">{detailStore.name}</h2>
                 <p class="mt-2">{detailStore.addres},  {detailStore.postalcode}</p>
                 <p class="mt-2">{detailStore.phonenumber}</p>
+                {#if reviews.promedio}
+                <p class="text-sm text-white mt-4 flex justify-center items-center">
+                   <span class="ml-2 flex ">
+                    {#each Array(5) as _, index}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                        class="w-5 h-5 {index < Math.round(reviews.promedio) ? 'text-yellow-500' : 'text-gray-300'}"
+                      >
+                        <path d="M12 .587l3.668 7.429 8.2 1.179-5.917 5.761 1.396 8.144L12 18.897l-7.347 3.873 1.396-8.144-5.917-5.761 8.2-1.179z" />
+                      </svg>
+                    {/each}
+                  </span>
+                </p>
+              {:else}
+                <p class="text-sm text-white mt-4">No hay reseñas disponibles.</p>
+              {/if}
               </div> 
               <div class="overflow-x-auto p-4">
                 <table class="min-w-full table-auto bg-white shadow-md rounded-lg">
