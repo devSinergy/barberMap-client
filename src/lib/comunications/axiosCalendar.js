@@ -13,7 +13,6 @@ apiCalendar.interceptors.response.use(
         return response },
     (error) =>{
         return Promise.reject(error)}
-
 )
 
 export default apiCalendar;

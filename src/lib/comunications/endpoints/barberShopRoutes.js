@@ -3,17 +3,15 @@ import apiStores from "../axiosBarberShop";
 export const getBarberShops = async() =>{
     try {
         const response = await apiStores.get('/');
-        return response.data
-        
+        return { success: true, data: response.data };
     } catch (error) {
-        console.error('Error al obtener barberias:', error); 
-        throw error; 
+        // @ts-ignore
+        return { success: false, error: error.message || 'Error desconocido' };
     }
 }
 
 export const getStoreOne = async(/** @type {any} */ id) =>{
     try {
-        
         const response = await apiStores.get(`/${id}`);
         return response.data;
     } catch (error) {

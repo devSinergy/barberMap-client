@@ -1,11 +1,11 @@
 <script>
 // @ts-nocheck
-
+    import Loader from "$lib/loader/loader.svelte";
     import "/src/global.css";
     import NavBar from "$lib/components/navBar/navBar.svelte";
     import { goto } from '$app/navigation';
-    export let data // Recibe los datos de barberos desde el load()
-    const { barberShops, codigoPostal} = data;
+    export let data ;
+    const { barberShops, codigoPostal,error} = data;
     import { getStoreReview } from "$lib/comunications/endpoints/reviewsRoutes.js";
     let reviews = {};
     const fetchReviews = async (/** @type {string | number} */ id) => {
@@ -50,8 +50,21 @@
       estado: ''
     };
   }
+  let isLoading = error && (!barberShops.length);
+  if (error) {
+    // Si hay un error, activamos el loader durante 12 segundos
+    setTimeout(() => {
+      isLoading = false;
+    }, 12000);
+  }
+
+ 
 </script>
 <main>
+  {#if isLoading}
+  <Loader />
+  {/if}
+  {#if !isLoading}
     <NavBar />
     
     <section class="p-6 bg-gray-100">
@@ -136,5 +149,5 @@
           </div>
           
     </section>
-    
+   {/if} 
 </main>

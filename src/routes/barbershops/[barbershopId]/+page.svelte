@@ -5,9 +5,6 @@
     const {detailStore,services,calendar,reviews} = data
     import "/src/global.css";
     let activeTab = 'info';  
-    console.log(calendar)
-    console.log(services)
-    
 </script>
 <main>
     <NavBar/>
