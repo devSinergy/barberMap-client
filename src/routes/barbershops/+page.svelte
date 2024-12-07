@@ -7,6 +7,7 @@
     export let data ;
     const { barberShops, codigoPostal,error} = data;
     import { getStoreReview } from "$lib/comunications/endpoints/reviewsRoutes.js";
+    
     let reviews = {};
     const fetchReviews = async (/** @type {string | number} */ id) => {
     try {
@@ -50,12 +51,12 @@
       estado: ''
     };
   }
-  let isLoading = error && (!barberShops.length);
-  if (error) {
+  let isLoading = true ;
+  if (isLoading) {
     // Si hay un error, activamos el loader durante 12 segundos
     setTimeout(() => {
       isLoading = false;
-    }, 12000);
+    }, 3000);
   }
 
  

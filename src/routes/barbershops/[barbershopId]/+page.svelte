@@ -1,8 +1,9 @@
 <script>
+    let userImg = "/images/backgrounds/user.png"
     import NavBar from "$lib/components/navBar/navBar.svelte";
     import Carousel from "$lib/components/carrousel/carousel.svelte";
     export let data ;
-    const {detailStore,services,calendar,reviews} = data
+    const {detailStore,services,calendar,reviews,detailreviews,appoitmens} = data
     import "/src/global.css";
     let activeTab = 'info';  
 </script>
@@ -23,7 +24,7 @@
           <li>
             <button 
               class={activeTab === 'workers' ? 'text-white' : 'text-black'} 
-              on:click={() => activeTab = 'workers'}>Trabajadores</button>
+              on:click={() => activeTab = 'dates'}>Calendario de citas</button>
           </li>
         </ul>
     </nav>
@@ -93,6 +94,36 @@
             <div class="w-full lg:w-1/2 p-4">
               <Carousel images={detailStore.images} />
             </div>
+            <div>
+              <h2 class="text-2xl font-bold text-center mb-6 mt-6  underline underline-offset-8">Reseñas</h2>
+              {#if detailreviews.length === 0}
+                  <p class="text-center text-gray-600">No hay reseñas para esta barbería.</p>
+              {:else}
+                  <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                      {#each detailreviews as reviewdetail}
+                          <div class="bg-white rounded-lg shadow-md p-6 flex items-center space-x-4">
+                              <!-- Imagen de usuario -->
+                              <div class="flex-shrink-0">
+                                  <img 
+                                      src={userImg} 
+                                      alt="Imagen de usuario" 
+                                      class="w-12 h-12 rounded-full object-cover"
+                                  />
+                              </div>
+                              <!-- Detalles de la reseña -->
+                              <div class="flex-1">
+                                  <h3 class="text-lg font-semibold text-gray-800 ">{reviewdetail.client}</h3>
+                                  <p class="text-sm text-gray-600 mt-1">{reviewdetail.comment}</p>
+                              </div>
+                              <!-- Puntuación -->
+                              <div class="w-[80px] h-22 flex items-center justify-center bg-gray-200 text-gray-500 rounded-full text-[60px] font-bold mb-2">
+                                  {reviewdetail.puntuation}
+                              </div>
+                          </div>
+                      {/each}
+                  </div>
+              {/if}
+            </div>
         </div>
         {:else if activeTab === 'services'}
         <div class="text-2xl text-center mt-4 mb-4 font-serif font-semibold underline underline-offset-8">
@@ -117,7 +148,24 @@
             </div>
           {/each}
         </div>
-        
+        {:else if activeTab === 'dates'}
+        <div class="p-4">
+          <h2 class="text-2xl font-bold mb-4 text-center underline underline-offset-8">Citas</h2>
+          <p class="text-gray-600 mb-6 mt-6  ml-">
+            Aquí puedes ver información y disponibilidad de horas
+          </p>
+          <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
+            {#each appoitmens as dates}
+              <div class="bg-white shadow-md rounded-lg p-4 flex flex-col gap-2">
+                 <p class="font-bold text-xl">Hora: {dates.hour}</p>
+                <h3 class="text-lg text-gray-500">{dates.clientname}</h3>
+                <p class="text-sm text-gray-500">Servicio: {dates.service}</p>
+                <p class="text-sm text-gray-500">Fecha: {dates.date}</p>
+                <p class="text-sm text-gray-500">Duración: {dates.lapsetime} min</p>
+              </div>
+            {/each}
+          </div>
+        </div>
         {/if} 
       </section>
 </main>
