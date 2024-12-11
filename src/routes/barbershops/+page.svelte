@@ -1,5 +1,6 @@
 <script>
 // @ts-nocheck
+    import { onMount } from "svelte";
     import Loader from "$lib/loader/loader.svelte";
     import "/src/global.css";
     import NavBar from "$lib/components/navBar/navBar.svelte";
@@ -52,12 +53,18 @@
     };
   }
   let isLoading = true ;
-  if (isLoading) {
-    // Si hay un error, activamos el loader durante 12 segundos
-    setTimeout(() => {
+   onMount(() => {
+    // Iniciamos el loader por un tiempo fijo (ej: 13 segundos)
+    const timeout = setTimeout(() => {
       isLoading = false;
-    }, 3000);
-  }
+    }, 13000);
+
+    // Si los datos llegan antes, limpiamos el timeout
+    if (data) {
+      clearTimeout(timeout);
+      isLoading = false;
+    }
+  });
 
  
 </script>
@@ -69,29 +76,22 @@
     <NavBar />
     
     <section class="p-6 bg-gray-100">
-        <form class="mb-6 flex flex-col gap-6 items-start bg-white p-4 rounded-lg shadow-md lg:gap-[200px] lg:flex-row">
+        <form class="mb-6 grid grid-cols-2 gap-6 items-start bg-white p-4 rounded-lg shadow-md lg:gap-[200px] lg:flex-row">
             
            <input 
               type="text" 
               bind:value={filters.nombre} 
               placeholder="Nombre de la barbería"
-              class="p-2 border rounded w-48"
+              class="p-2 border rounded w-36"
             />
           <input 
               type="text" 
               bind:value={filters.codigoPostal} 
               placeholder="Código Postal"
-              class="p-2 border rounded w-48"
+              class="p-2 border rounded w-36"
             />
-            <select 
-              bind:value={filters.estado}
-              class="p-2 border rounded w-48"
-            >
-              <option value="">Estado</option>
-              <option value="disponible">Disponible</option>
-              <option value="no disponible">No Disponible</option>
-            </select>
-            <button type="button" on:click={resetFilters} class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+           
+            <button type="button" on:click={resetFilters} class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 w-[90%]">
               Limpiar
             </button>
         </form>

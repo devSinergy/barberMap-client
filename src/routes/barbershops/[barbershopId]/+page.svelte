@@ -2,10 +2,30 @@
     let userImg = "/images/backgrounds/user.png"
     import NavBar from "$lib/components/navBar/navBar.svelte";
     import Carousel from "$lib/components/carrousel/carousel.svelte";
+    // @ts-ignore
     export let data ;
     const {detailStore,services,calendar,reviews,detailreviews,appoitmens} = data
     import "/src/global.css";
     let activeTab = 'info';  
+    import Calendar from "$lib/components/calendar/calendar.svelte";
+    import { selectedDate } from "$lib/components/calendar/calendarStore.js";
+    let selected;
+    // @ts-ignore
+    // @ts-ignore
+    $: selected = $selectedDate ? $selectedDate.toDateString() : 'No hay fecha seleccionada';
+    $: selectedDateFormatted = $selectedDate
+    // @ts-ignore
+    ? `${$selectedDate.getFullYear()}-${($selectedDate.getMonth() + 1).toString().padStart(2, '0')}-${$selectedDate.getDate().toString().padStart(2, '0')}`
+    : null;
+
+    $: filteredAppointments = appoitmens.filter((/** @type {{ date: string | number | Date; }} */ appointment) => {
+    const appointmentDate = new Date(appointment.date);
+    const formattedAppointmentDate = `${appointmentDate.getFullYear()}-${(appointmentDate.getMonth() + 1).toString().padStart(2, '0')}-${appointmentDate.getDate().toString().padStart(2, '0')}`;
+    return formattedAppointmentDate === selectedDateFormatted; // Comparar solo la fecha
+    
+    });
+    let showModal = false;
+
 </script>
 <main>
     <NavBar/>
@@ -116,7 +136,7 @@
                                   <p class="text-sm text-gray-600 mt-1">{reviewdetail.comment}</p>
                               </div>
                               <!-- Puntuación -->
-                              <div class="w-[80px] h-22 flex items-center justify-center bg-gray-200 text-gray-500 rounded-full text-[60px] font-bold mb-2">
+                              <div class="w-[60px] h-[60px] flex items-center justify-center bg-gray-200 text-gray-500 rounded-full text-[30px] font-bold mb-2">
                                   {reviewdetail.puntuation}
                               </div>
                           </div>
@@ -146,6 +166,44 @@
                 </p>
               </div>
             </div>
+            <button
+            on:click={() => (showModal = true)}
+            class="fixed bottom-6 right-6 bg-gray-900 hover:bg-gray-900 text-white font-bold py-3 px-6 rounded-full shadow-lg"
+            >
+            Ver Peinados
+          </button>
+          <!-- Modal -->
+          {#if showModal}
+          <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div class="bg-white rounded-lg shadow-lg max-w-lg w-full">
+              <div class="p-4 border-b flex justify-between items-center">
+                <h3 class="text-lg font-semibold">Peinados Disponibles</h3>
+                <button
+                  on:click={() => (showModal = false)}
+                  class="text-gray-600 hover:text-gray-800"
+                >
+                  ✖
+                </button>
+              </div>
+              <div class="p-6">
+                <!-- Contenido del modal -->
+                <ul>
+                  <li>Peinado Clásico</li>
+                  <li>Peinado Moderno</li>
+                  <li>Peinado Elegante</li>
+                </ul>
+              </div>
+              <div class="p-4 border-t">
+                <button
+                  on:click={() => (showModal = false)}
+                  class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                >
+                  Cerrar
+                </button>
+              </div>
+            </div>
+          </div>
+          {/if}
           {/each}
         </div>
         {:else if activeTab === 'dates'}
@@ -154,16 +212,21 @@
           <p class="text-gray-600 mb-6 mt-6  ml-">
             Aquí puedes ver información y disponibilidad de horas
           </p>
+          <Calendar />
           <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
-            {#each appoitmens as dates}
-              <div class="bg-white shadow-md rounded-lg p-4 flex flex-col gap-2">
-                 <p class="font-bold text-xl">Hora: {dates.hour}</p>
-                <h3 class="text-lg text-gray-500">{dates.clientname}</h3>
-                <p class="text-sm text-gray-500">Servicio: {dates.service}</p>
-                <p class="text-sm text-gray-500">Fecha: {dates.date}</p>
-                <p class="text-sm text-gray-500">Duración: {dates.lapsetime} min</p>
-              </div>
-            {/each}
+                    {#if filteredAppointments.length > 0}
+          {#each filteredAppointments as dates}
+            <div class="bg-white shadow-md rounded-lg p-4 flex flex-col gap-2">
+              <p class="font-bold text-xl">Hora: {dates.hour}</p>
+              <h3 class="text-lg text-gray-500">{dates.clientname}</h3>
+              <p class="text-sm text-gray-500">Servicio: {dates.service}</p>
+              <p class="text-sm text-gray-500">Fecha: {dates.date.split("T")[0]}</p>
+              <p class="text-sm text-gray-500">Duración: {dates.lapsetime} min</p>
+            </div>
+          {/each}
+        {:else}
+          <p class="text-2xl ml-[50%] mt-5 w-full text-center">No hay citas para este día.</p>
+        {/if}
           </div>
         </div>
         {/if} 
