@@ -9,3 +9,12 @@ export const getHaircut = async() =>{
         throw error; 
     }
 }
+
+export const getStoreHaircut = async(/** @type {any} */ barbershopid) =>{
+    try {
+        const response = await apiHaircut.get(`/${barbershopid}`)
+        return response.data
+    } catch (error) {
+        console.error('Error al obtener peinados:', error);
+    }
+}

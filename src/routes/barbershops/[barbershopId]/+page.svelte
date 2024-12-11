@@ -4,7 +4,7 @@
     import Carousel from "$lib/components/carrousel/carousel.svelte";
     // @ts-ignore
     export let data ;
-    const {detailStore,services,calendar,reviews,detailreviews,appoitmens} = data
+    const {detailStore,services,calendar,reviews,detailreviews,appoitmens,haircuts} = data
     import "/src/global.css";
     let activeTab = 'info';  
     import Calendar from "$lib/components/calendar/calendar.svelte";
@@ -25,6 +25,10 @@
     
     });
     let showModal = false;
+    /**
+   * @type {null}
+   */
+    let selectedImage = null;
 
 </script>
 <main>
@@ -174,42 +178,59 @@
           </button>
           <!-- Modal -->
           {#if showModal}
-          <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div class="bg-white rounded-lg shadow-lg max-w-lg w-full">
-              <div class="p-4 border-b flex justify-between items-center">
-                <h3 class="text-lg font-semibold">Peinados Disponibles</h3>
-                <button
-                  on:click={() => (showModal = false)}
-                  class="text-gray-600 hover:text-gray-800"
-                >
-                  ✖
-                </button>
-              </div>
-              <div class="p-6">
-                <!-- Contenido del modal -->
-                <ul>
-                  <li>Peinado Clásico</li>
-                  <li>Peinado Moderno</li>
-                  <li>Peinado Elegante</li>
-                </ul>
-              </div>
-              <div class="p-4 border-t">
-                <button
-                  on:click={() => (showModal = false)}
-                  class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                >
-                  Cerrar
-                </button>
-              </div>
+  <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div class="bg-white rounded-lg shadow-lg max-w-lg w-[90%] ">
+      <div class="p-4 border-b flex justify-between items-center">
+        <h3 class="text-lg font-semibold ">Peinados Disponibles</h3>
+        <button on:click={() => (showModal = false)} class="text-gray-600 hover:text-gray-800">
+          ✖
+        </button>
+      </div>
+
+      <!-- Grid de peinados -->
+      <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {#each haircuts as haircut}
+          <div class="border rounded-lg p-2">
+            <div>
+              <img
+                src={haircut.images}
+                alt="corte"
+                class="w-full h-auto rounded-md cursor-pointer"
+                on:click={() => (selectedImage = haircut.images)}
+              />
+            </div>
+            <div class="text-center">
+              <p class="text-sm text-gray-600 mt-2">
+                Estilo: {haircut.style || 'No especificada'}
+              </p>
             </div>
           </div>
-          {/if}
+        {/each}
+      </div>
+    </div>
+  </div>
+
+  <!-- Imagen a pantalla completa -->
+  {#if selectedImage}
+    <div class="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
+      <div class="relative">
+        <button
+          on:click={() => (selectedImage = null)}
+          class="absolute top-4 right-4 text-white text-3xl"
+        >
+          ✖
+        </button>
+        <img src={selectedImage} alt="Imagen a pantalla completa" class="max-w-full max-h-full object-contain" />
+      </div>
+    </div>
+  {/if}
+{/if}
           {/each}
         </div>
         {:else if activeTab === 'dates'}
         <div class="p-4">
           <h2 class="text-2xl font-bold mb-4 text-center underline underline-offset-8">Citas</h2>
-          <p class="text-gray-600 mb-6 mt-6  ml-">
+          <p class="text-gray-600 mb-6 mt-6 p-4 text-center ">
             Aquí puedes ver información y disponibilidad de horas
           </p>
           <Calendar />
