@@ -241,7 +241,6 @@
               <p class="font-bold text-xl">Hora: {dates.hour}</p>
               <h3 class="text-lg text-gray-500">{dates.clientname}</h3>
               <p class="text-sm text-gray-500">Servicio: {dates.service}</p>
-              <p class="text-sm text-gray-500">Fecha: {dates.date.split("T")[0]}</p>
               <p class="text-sm text-gray-500">Duración: {dates.lapsetime} min</p>
             </div>
           {/each}
