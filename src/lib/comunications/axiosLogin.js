@@ -3,7 +3,7 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 
 const apiLogin = axios.create({
-    baseURL:'http://localhost:3000/auth/login',
+    baseURL:'https://barbermap-server.onrender.com/auth/login',
     timeout:5000,
     headers:{
         'Content-Type':'application/json'
