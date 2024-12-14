@@ -1,9 +1,11 @@
 <script>
 // @ts-nocheck
+    import "/src/global.css";
     import { onMount } from 'svelte';
     import { showAppoitmens } from "$lib/comunications/endpoints/appoitmensRoutes";
     import { getStoreHaircut } from "$lib/comunications/endpoints/haircutRoutes";
     import { showReviews } from "$lib/comunications/endpoints/reviewsRoutes";
+    
     
     export let data; // Recibe la data pasada desde `+page.server.js`
     let barbershopid = data.props.barbershopid; // Extraemos barbershopid
