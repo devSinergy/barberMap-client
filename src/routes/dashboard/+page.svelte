@@ -19,7 +19,7 @@
 
     // Función para obtener datos
     const fetchData = async () => {
-    console.log(barbershopid);
+   
     try {
         loading = true;
         appointments = await showAppoitmens(barbershopid);
@@ -39,13 +39,14 @@
 </script>
 
 <main class="flex min-h-screen bg-gray-100">
+    <div></div>
     <!-- Barra lateral -->
     <aside class="w-1/4 bg-gray-900 text-white p-4">
         <nav>
-            <ul>
+            <ul class="flex flex-col gap-6 ">
                 <li>
                     <button 
-                        class="w-full p-2 text-left hover:bg-gray-700 cursor-pointer"
+                        class="w-full p-2 text-left hover:bg-gray-700 cursor-pointer underline underline-offset-8"
                         class:selected={activeTab === 'appointments'}
                         on:click={() => activeTab = 'appointments'}
                         aria-pressed={activeTab === 'appointments'}>
@@ -54,7 +55,7 @@
                 </li>
                 <li>
                     <button 
-                        class="w-full p-2 text-left hover:bg-gray-700 cursor-pointer"
+                        class="w-full p-2 text-left hover:bg-gray-700 cursor-pointer underline underline-offset-8"
                         class:selected={activeTab === 'haircuts'}
                         on:click={() => activeTab = 'haircuts'}
                         aria-pressed={activeTab === 'haircuts'}>
@@ -63,7 +64,7 @@
                 </li>
                 <li>
                     <button 
-                        class="w-full p-2 text-left hover:bg-gray-700 cursor-pointer"
+                        class="w-full p-2 text-left hover:bg-gray-700 cursor-pointer underline underline-offset-8"
                         class:selected={activeTab === 'reviews'}
                         on:click={() => activeTab = 'reviews'}
                         aria-pressed={activeTab === 'reviews'}>

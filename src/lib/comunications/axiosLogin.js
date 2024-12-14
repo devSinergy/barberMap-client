@@ -1,14 +1,13 @@
 import axios from "axios";
 
-
+axios.defaults.withCredentials = true;
 
 const apiLogin = axios.create({
-    baseURL:'https://barbermap-server.onrender.com/auth',
+    baseURL:'https://barbermap-server.onrender.com/auth/login',
     timeout:5000,
     headers:{
         'Content-Type':'application/json'
     },
-    withCredentials: true
 });
 apiLogin.interceptors.response.use(
     (response) => {
