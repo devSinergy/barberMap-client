@@ -5,11 +5,10 @@
     import { getStoreHaircut } from "$lib/comunications/endpoints/haircutRoutes";
     import { showReviews } from "$lib/comunications/endpoints/reviewsRoutes";
     
-    
     export let data;
-    const barbershopid = data
+    const barbershopid = data?.barbershopid || ''; 
     let activeTab = 'appointments';
-    
+    console.log(barbershopid)
 
     // @ts-ignore
     let appointments = [];
@@ -23,6 +22,7 @@
     const fetchData = async () => {
    
     try {
+        console.log(barbershopid)
         loading = true;
         appointments = await showAppoitmens(barbershopid);
         haircuts = await getStoreHaircut(barbershopid);

@@ -1,27 +1,27 @@
 // @ts-nocheck
 // +page.js
-import jwt from 'jsonwebtoken';
+import jwt_decode from 'jwt-decode'; // Importación correcta de la función por defecto
 
 export async function load() {
-  // Verificar si estamos en el navegador
+  // Si estamos en el navegador
   if (typeof window !== 'undefined') {
     // Obtener el AuthToken desde localStorage
-    const authToken = localStorage.getItem('AuthToken');
+    const authToken = localStorage.getItem('Authtoken');
     
-    // Verificar si el token existe
+    // Si el token existe, intentar decodificarlo
     if (authToken) {
       try {
         // Decodificar el JWT
-        const decoded = jwt.decode(authToken);
+        const decoded = jwt_decode(authToken);
         
-        // Extraer el barbershopid del token decodificado
+        // Extraer el barbershopid del token decodificado, si existe
         const barbershopid = decoded.barbershopid || null;
         
         return {
           barbershopid, // Enviar el barbershopid al componente
         };
       } catch (error) {
-        console.error("Error al decodificar el token", error);
+        console.error("Error al decodificar el token:", error);
         return {
           barbershopid: null, // Si ocurre un error, enviar null
         };
@@ -34,5 +34,6 @@ export async function load() {
     barbershopid: null,
   };
 }
+
 
 
