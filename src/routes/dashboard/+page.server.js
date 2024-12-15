@@ -1,23 +1,25 @@
 // @ts-nocheck
-// src/routes/dashboard/+page.server.js
+import { JWTSECRET } from '$env/static/private';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
-import { redirect } from '@sveltejs/kit';  // Para redirigir
+dotenv.config();
 
-/** 
- * La función `load` debe devolver un objeto que puede contener `props`, `status` o `redirect`.
- * Si el usuario no está autenticado, puedes redirigirlo con `redirect`.
- */
-export async function load({ locals }) {
-    if (!locals.user) {
-        // Si no hay usuario, redirige a la página de login.
-        throw redirect(302, '/login');
-    }
-    // Si el usuario está autenticado, retorna sus datos como props
-    return {
-        props: {
-            barbershopid: locals.user.barbershopid
+export async function load() {
+    let barbershopid = null;
+
+    // Verifica si estamos en el navegador
+    if (typeof window !== 'undefined') {
+        const token = localStorage.getItem('Authtoken');
+        if (token) {
+            try {
+                const decoded = jwt.decode(token, JWTSECRET);
+                barbershopid = decoded?.barbershopid || null;
+            } catch (error) {
+                console.error('Error al decodificar el token:', error);
+            }
         }
-    };
-    console.log(barbershopid)
-}
+    }
 
+    return barbershopid;
+}

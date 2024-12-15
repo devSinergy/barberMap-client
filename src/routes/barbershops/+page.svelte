@@ -52,19 +52,30 @@
       estado: ''
     };
   }
-  let isLoading = true ;
-   onMount(() => {
-    // Iniciamos el loader por un tiempo fijo (ej: 13 segundos)
-    const timeout = setTimeout(() => {
-      isLoading = false;
-    }, 13000);
 
-    // Si los datos llegan antes, limpiamos el timeout
-    if (data) {
-      clearTimeout(timeout);
-      isLoading = false;
-    }
-  });
+
+  let isLoading = true ;
+
+  onMount(() => {
+  if (!data.barberShops || data.barberShops.length === 0) {
+    // Inicia un intervalo para verificar cuándo llegan los datos
+    const interval = setInterval(() => {
+      if (data.barberShops && data.barberShops.length > 0) {
+        localBarberShops = data.barberShops;
+        isLoading = false; // Desactiva isLoading cuando llegan los datos
+        clearInterval(interval); // Limpia el intervalo
+      }
+    }, 500);
+
+    // Si pasa demasiado tiempo y aún no hay datos
+    const timeout = setTimeout(() => {
+     
+    }, 13000); // Máximo de 13 segundos
+  } else {
+    // Si los datos ya están disponibles inmediatamente
+    isLoading = false;
+  }
+});
 
  
 </script>
