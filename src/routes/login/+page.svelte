@@ -1,7 +1,7 @@
 <script>
+ import "/src/global.css";
   import { sendForm } from "$lib/comunications/endpoints/loginRoutes"; // Asegúrate de que la ruta sea correcta
   import { goto } from '$app/navigation';
-
   let loginBackground = "/images/backgrounds/fondologin.jpg";
   let phonenumber = '';
   let password = '';
