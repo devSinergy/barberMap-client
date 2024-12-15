@@ -6,9 +6,10 @@
     import { showReviews } from "$lib/comunications/endpoints/reviewsRoutes";
     
     
-    export let data; // Recibe la data pasada desde `+page.server.js`
-    let barbershopid = data// Extraemos barbershopid
+    export let data;
+    const barbershopid = data
     let activeTab = 'appointments';
+    
 
     // @ts-ignore
     let appointments = [];
