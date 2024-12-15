@@ -7,6 +7,7 @@ export const sendForm = async (/** @type {{ phonenumber: Number; password: strin
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(formData), // Convertir los datos del formulario a JSON
+            credentials: 'include',
         });
 
         // Verificar si la respuesta fue exitosa (código 2xx)
