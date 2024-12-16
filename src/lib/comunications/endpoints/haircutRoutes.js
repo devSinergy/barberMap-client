@@ -18,3 +18,13 @@ export const getStoreHaircut = async(/** @type {any} */ barbershopid) =>{
         console.error('Error al obtener peinados:', error);
     }
 }
+
+export const deleteHaircut = async(/** @type {any} */ id)=>{
+    try {
+        const response = await apiHaircut.delete(`/${id}`);
+        const message = response.data.message
+        return message
+    } catch (error) {
+        throw error
+    }
+}

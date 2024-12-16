@@ -4,7 +4,6 @@
     import "/src/global.css";
     import { goto } from '$app/navigation';
     const {haircuts} = data
-    import { getBarber } from "$lib/comunications/endpoints/barbersRoutes.js";
     import { getStoreOne } from "$lib/comunications/endpoints/barberShopRoutes.js";
     /**
    * @type {any[]}
@@ -13,17 +12,16 @@
 
     const fetchBarber = async () =>{
         barberInfo = await Promise.all(
-            haircuts.map(async(/** @type {{ barberId: any; }} */ haircut)=>{
+            haircuts.map(async(/** @type {{ barbershopid: any; }} */ haircut)=>{
                 try {
-                    const barber = await getBarber(haircut.barberId);
-                    const store = await getStoreOne(barber.workplaceid)
+                    
+                    const store = await getStoreOne(haircut.barbershopid)
                     return {
                         ...haircut,
-                        barberName: barber.name,
-                        barberExperience: barber.experience, // Si tienes otros campos relevantes
-                        barberWorkPlacer : barber.workplaceid,
-                        storeName : store.name
+                        barbershopName: store.name,
+                    
                     };
+                    
                 } catch (error) {
                     console.error('Error al obtener detalles del barbero:', error);
                     return {
@@ -35,6 +33,7 @@
         )
     };
     fetchBarber();
+   
 </script>
 <main>
     <NavBar/>
@@ -48,16 +47,19 @@
                 </div>
                 <div class="text-center">
                   <h3 class="mt-2 text-[12px] font-semibold">Created by:</h3>
-                  <p class="text-2xl">{haircut.barberName}</p>
+                  <p class="text-2xl">{haircut.owner}</p>
                   <p class="text-sm text-gray-600 mt-2">
-                    Estilo: {haircut.style || 'No especificada'}
+                     {haircut.style || 'No especificada'}
                   </p>
+                  <p class="text-sm text-gray-600 mt-2">
+                    {haircut.hairtype || 'No especificada'}
+                 </p>
                   <a 
-                    href={`/barbershops/${haircut.barberWorkPlacer}`} 
+                    href={`/barbershops/${haircut.barbershopid}`} 
                     class="mt-2 text-blue-600 hover:underline cursor-pointer"
-                    aria-label={`Ver detalles de la barbería ${haircut.storeName}`}
+                    aria-label={`Ver detalles de la barbería ${haircut.barbershopid}`}
                   >
-                    {haircut.storeName}
+                    {haircut.barbershopName}
                   </a>
                 </div>
               </div>

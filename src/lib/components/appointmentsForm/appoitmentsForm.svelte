@@ -31,7 +31,7 @@
                 ✕
             </button>
 
-            <h2 class="text-xl font-bold mb-4">Crear Nueva Cita</h2>
+            <h2 class="text-xl font-bold mb-4 text-center">Crear Nueva Cita</h2>
             <form on:submit|preventDefault={() => addAppointment()} class="space-y-4">
                 <label>
                     Nombre del Cliente:
@@ -43,13 +43,13 @@
                 </label>
                 <label>
                     Hora:
-                    <input type="text" bind:value={formData.hour} class="border rounded p-2 w-full" />
+                    <input type="text" bind:value={formData.hour}  placeholder=" formato 00:00" class="border rounded p-2 w-full" />
                 </label>
                 <label>
                     Duración:
-                    <input type="text" bind:value={formData.lapsetime} placeholder="Duración (ej. 30 minutos)" class="border rounded p-2 w-full" />
+                    <input type="text" bind:value={formData.lapsetime} placeholder="Duración (30 minutos)" class="border rounded p-2 w-full" />
                 </label>
-                <button type="submit" class="bg-green-500 text-white p-2 mt-4 rounded-lg">Agregar</button>
+                <button type="submit" class="bg-gray-900 text-white p-2 mt-4 rounded-lg">Agregar</button>
             </form>
         </div>
     </div>

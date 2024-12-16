@@ -3,7 +3,8 @@
     import "/src/global.css";
     import { onMount } from 'svelte';
     import { showAppoitmens,deleteApppoitmens } from "$lib/comunications/endpoints/appoitmensRoutes";
-    import { getStoreHaircut } from "$lib/comunications/endpoints/haircutRoutes";
+    import { getStoreHaircut ,deleteHaircut} from "$lib/comunications/endpoints/haircutRoutes";
+    import { getServices } from "$lib/comunications/endpoints/servicesRoutes.js";
     import { showReviews } from "$lib/comunications/endpoints/reviewsRoutes";
     import { goto } from "$app/navigation";
     import AppoitmentsForm from "$lib/components/appointmentsForm/appoitmentsForm.svelte";
@@ -19,6 +20,8 @@
     let haircuts = [];
     // @ts-ignore
     let reviews = [];
+
+    let services = [];
     let loading = true;
 
     // Función para obtener datos
@@ -29,6 +32,7 @@
         appointments = await showAppoitmens(barbershopid);
         haircuts = await getStoreHaircut(barbershopid);
         reviews = await showReviews(barbershopid);
+        services = await getServices(barbershopid)
     } catch (error) {
         console.error('Error fetching data:', error);
     } finally {
@@ -45,10 +49,21 @@
         try {
             const message = await deleteApppoitmens(id);
             appointments = appointments.filter(appointment => appointment._id !== id);
+            alert(message)
         } catch (error) {
             console.error('Error deleting appointment:', error);
         }
     };
+
+    const deleteCute = async(id) =>{
+        try {
+            const message = await deleteHaircut(id);
+            haircuts = haircuts.filter(haircuts => haircuts._id !==id)
+            alert(message)
+        } catch (error) {
+            console.error('Error al eliminar el corte')
+        }
+    }
 
     function logout() {
     
@@ -78,6 +93,15 @@
                         on:click={() => activeTab = 'appointments'}
                         aria-pressed={activeTab === 'appointments'}>
                         Citas
+                    </button>
+                </li>
+                <li>
+                    <button 
+                        class="w-full p-2 text-left hover:bg-gray-700 cursor-pointer underline underline-offset-8"
+                        class:selected={activeTab === 'servicios'}
+                        on:click={() => activeTab = 'servicios'}
+                        aria-pressed={activeTab === 'servicios'}>
+                        Servicios
                     </button>
                 </li>
                 <li>
@@ -146,14 +170,31 @@
                 <AppoitmentsForm {barbershopid} show={showModal} closeModal={closeModal} />
             </div>
             {/if}
+            {#if activeTab === 'servicios'}
+                <h2 class="text-xl font-bold mb-4">Servicios</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    {#each services as { title,description,price }}
+                        <div class="bg-white flex flex-col items-center p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+                            <div class="bg-gray-900 flex flex-row justify-around text-white p-1 w-full">
+                                <h3 class="text-lg font-semibold mb-2 mt-2">{title}</h3>
+                                 <p class="text-lg font-semibold mb-2 mt-2">{price}€</p>
+                            </div>
+                            <p class="mt-4"> {description}</p>
+                            
+                            <button class="bg-red-700 text-white p-2 mt-4 rounded-lg" >Eliminar</button>
+                        </div>
+                    {/each}
+                </div>
+            {/if}
 
             {#if activeTab === 'haircuts'}
                 <h2 class="text-xl font-bold mb-4">Peinados</h2>
                 <ul class="grid grid-cols-2 gap-4">
-                    {#each haircuts as { images, style }}
+                    {#each haircuts as { images, style ,_id}}
                         <li class="p-4 border shadow rounded">
                             <img src={images} alt={style} class="w-full h-32 object-cover rounded" />
                             <p class="mt-2">{style}</p>
+                            <button class="bg-red-700 text-white p-2 mt-4 rounded-lg" on:click={() => deleteHaircut(_id)}>Eliminar</button>
                         </li>
                     {/each}
                 </ul>

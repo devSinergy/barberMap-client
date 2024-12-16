@@ -1,6 +1,6 @@
 <script>
 // @ts-nocheck
-    import { onMount } from "svelte";
+    import { onMount,onDestroy } from "svelte";
     import Loader from "$lib/loader/loader.svelte";
     import "/src/global.css";
     const barbershopImg = "images/backgrounds/barbershop.png"
@@ -59,21 +59,25 @@
 
   onMount(() => {
   if (!data.barberShops || data.barberShops.length === 0) {
-    // Inicia un intervalo para verificar cuándo llegan los datos
     const interval = setInterval(() => {
       if (data.barberShops && data.barberShops.length > 0) {
         localBarberShops = data.barberShops;
-        isLoading = false; // Desactiva isLoading cuando llegan los datos
-        clearInterval(interval); // Limpia el intervalo
+        isLoading = false;
+        clearInterval(interval);
       }
     }, 500);
 
-    // Si pasa demasiado tiempo y aún no hay datos
     const timeout = setTimeout(() => {
-     
-    }, 13000); // Máximo de 13 segundos
+      isLoading = false; // O un mensaje de error si no llegan datos
+      clearInterval(interval);
+    }, 13000);
+
+    // Limpia los intervalos si el componente se destruye
+    onDestroy(() => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    });
   } else {
-    // Si los datos ya están disponibles inmediatamente
     isLoading = false;
   }
 });
@@ -89,7 +93,7 @@
     
     <section class="p-6 bg-white">
         <div>
-          <img src="{barbershopImg}" alt="barbershopbg" class="h-[25vh] ml-4">
+          <img src="{barbershopImg}" alt="barbershopbg" class="h-[25vh] ml-[5%]">
         </div>
         <form class="mb-6 mt-6 grid grid-cols-2 gap-6 items-start bg-white p-4 rounded-lg shadow-md lg:gap-[200px] lg:flex-row">
             
@@ -114,7 +118,7 @@
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
             {#if filteredBarberShops.length > 0}
               {#each filteredBarberShops as barbershop}
-                <div class="steam1  top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 relative rounded-lg shadow-lg overflow-hidden bg-white group">
+                <div class="steam1  top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 relative rounded-lg shadow-lg overflow-hidden bg-white group ">
                   <!-- Imagen -->
                   <img 
                     src={barbershop.cover} 
