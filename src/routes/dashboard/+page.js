@@ -1,6 +1,7 @@
 // @ts-nocheck
 // +page.js
 import jwt_decode from 'jwt-decode'; // Importación correcta de la función por defecto
+import { goto } from '$app/navigation';
 
 export async function load() {
   // Si estamos en el navegador
@@ -26,13 +27,10 @@ export async function load() {
           barbershopid: null, // Si ocurre un error, enviar null
         };
       }
+    }else {
+      goto('/');
     }
   }
-
-  // Si no estamos en el navegador o no hay AuthToken, enviar null
-  return {
-    barbershopid: null,
-  };
 }
 
 

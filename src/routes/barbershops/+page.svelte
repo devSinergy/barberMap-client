@@ -3,6 +3,7 @@
     import { onMount } from "svelte";
     import Loader from "$lib/loader/loader.svelte";
     import "/src/global.css";
+    const barbershopImg = "images/backgrounds/barbershop.png"
     import NavBar from "$lib/components/navBar/navBar.svelte";
     import { goto } from '$app/navigation';
     export let data ;
@@ -86,8 +87,11 @@
   {#if !isLoading}
     <NavBar />
     
-    <section class="p-6 bg-gray-100">
-        <form class="mb-6 grid grid-cols-2 gap-6 items-start bg-white p-4 rounded-lg shadow-md lg:gap-[200px] lg:flex-row">
+    <section class="p-6 bg-white">
+        <div>
+          <img src="{barbershopImg}" alt="barbershopbg" class="h-[25vh] ml-4">
+        </div>
+        <form class="mb-6 mt-6 grid grid-cols-2 gap-6 items-start bg-white p-4 rounded-lg shadow-md lg:gap-[200px] lg:flex-row">
             
            <input 
               type="text" 
@@ -106,7 +110,6 @@
               Limpiar
             </button>
         </form>
-
           <h1 class="text-2xl font-bold text-center mb-6">Lista de Barberías</h1>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
             {#if filteredBarberShops.length > 0}

@@ -62,7 +62,13 @@
               <div class="w-full lg:w-1/2 p-4 text-center">
                 <h2 class="text-xl font-semibold">{detailStore.name}</h2>
                 <p class="mt-2">{detailStore.addres},  {detailStore.postalcode}</p>
+                <div class="flex flex-col items-center ">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 mt-4 text-green-600">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+                </svg>                
                 <p class="mt-2">{detailStore.phonenumber}</p>
+                </div>
+              
                 {#if reviews.promedio}
                 <p class="text-sm text-white mt-4 flex justify-center items-center">
                    <span class="ml-2 flex ">
@@ -234,16 +240,15 @@
             Aquí puedes ver información y disponibilidad de horas
           </p>
           <Calendar />
-          <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
+          <div class="grid  grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 ml-4 w-[90%] ">
                     {#if filteredAppointments.length > 0}
           {#each filteredAppointments as dates}
-            <div class="bg-white shadow-md rounded-lg p-4 flex flex-col gap-2">
+            <div class="bg-white shadow-md rounded-lg p-4 flex flex-col gap-2 ">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-12 ml-10 ">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m7.848 8.25 1.536.887M7.848 8.25a3 3 0 1 1-5.196-3 3 3 0 0 1 5.196 3Zm1.536.887a2.165 2.165 0 0 1 1.083 1.839c.005.351.054.695.14 1.024M9.384 9.137l2.077 1.199M7.848 15.75l1.536-.887m-1.536.887a3 3 0 1 1-5.196 3 3 3 0 0 1 5.196-3Zm1.536-.887a2.165 2.165 0 0 0 1.083-1.838c.005-.352.054-.695.14-1.025m-1.223 2.863 2.077-1.199m0-3.328a4.323 4.323 0 0 1 2.068-1.379l5.325-1.628a4.5 4.5 0 0 1 2.48-.044l.803.215-7.794 4.5m-2.882-1.664A4.33 4.33 0 0 0 10.607 12m3.736 0 7.794 4.5-.802.215a4.5 4.5 0 0 1-2.48-.043l-5.326-1.629a4.324 4.324 0 0 1-2.068-1.379M14.343 12l-2.882 1.664" />
               </svg>
               <p class="font-bold text-xl">Hora: {dates.hour}</p>
               <h3 class="text-lg text-gray-500">{dates.clientname}</h3>
-              <p class="text-sm text-gray-500">Servicio: {dates.service}</p>
               <p class="text-sm text-gray-500">Duración: {dates.lapsetime} min</p>
             </div>
           {/each}

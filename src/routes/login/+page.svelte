@@ -63,8 +63,8 @@
 
 <main class="flex flex-col min-h-screen p-1">
   <!-- Sección de Imagen (mitad superior) -->
-  <div class="h-1/2 bg-cover bg-center">
-      <img src={loginBackground} alt="login" class="h-[60vh] w-full rounded-lg">
+  <div class="h-1/2 bg-cover bg-center brightness-50">
+      <img src={loginBackground} alt="login" class="h-[60vh] w-full rounded-lg ">
   </div>
 
   <!-- Sección del Formulario (mitad inferior) -->
