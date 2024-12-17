@@ -1,5 +1,6 @@
 <script>
 // @ts-nocheck
+    import Footer from "$lib/components/footer/footer.svelte";
     import "/src/global.css";
     import { onMount } from 'svelte';
     import { showAppoitmens,deleteApppoitmens } from "$lib/comunications/endpoints/appoitmensRoutes";
@@ -80,10 +81,9 @@
     };
 </script>
 
-<main class="flex min-h-screen bg-gray-100">
-    <div></div>
-    <!-- Barra lateral -->
-    <aside class="w-1/4 bg-gray-900 text-white p-4">
+<main >
+    <div class="flex min-h-screen bg-gray-100">
+       <aside class="w-1/4 bg-gray-900 text-white p-4">
         <nav>
             <ul class="flex flex-col gap-6 ">
                 <li>
@@ -215,5 +215,8 @@
                 </ul>
             {/if}
         {/if}
-    </section>
+    </section>  
+    </div><!-- Barra lateral -->
+   
+    <Footer />
 </main>

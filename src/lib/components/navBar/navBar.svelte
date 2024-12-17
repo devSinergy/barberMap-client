@@ -89,6 +89,8 @@
   <div class={`lg:hidden ${menuOpen ? 'block' : 'hidden'} mt-4`}>
     <a href="/barbershops" class="block py-2 hover:bg-gray-800">Barberias</a>
     <a href="/haircuts" class="block py-2 hover:bg-gray-800">Peinados</a>
-    <a href="/about-us" class="block py-2 hover:bg-gray-800">About Us</a>
+    <a href="/aboutus" class="block py-2 hover:bg-gray-800">About Us</a>
+    <a href="/contacto" class="block py-2 hover:bg-gray-800">Contacto</a>
+
   </div>
 </main>

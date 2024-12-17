@@ -1,10 +1,11 @@
 <script>
     import NavBar from "$lib/components/navBar/navBar.svelte";
+    import Footer from "$lib/components/footer/footer.svelte";
     export let data;
     import "/src/global.css";
-    import { goto } from '$app/navigation';
     const {haircuts} = data
     import { getStoreOne } from "$lib/comunications/endpoints/barberShopRoutes.js";
+  
     /**
    * @type {any[]}
    */
@@ -35,9 +36,9 @@
     fetchBarber();
    
 </script>
-<main>
+<main class="flex flex-col min-h-screen">
     <NavBar/>
-    <section class="mt-6">
+    <section class="mt-6 flex-1 container mx-auto p-4">
         <h2 class="text-2xl text-center mt-4 mb-8 font-serif font-semibold underline underline-offset-8">Peinados</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {#each barberInfo as haircut}
@@ -66,4 +67,5 @@
             {/each}
         </div>
     </section>
+    <Footer/>
 </main>

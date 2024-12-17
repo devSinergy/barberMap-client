@@ -1,6 +1,7 @@
 <script>
     let userImg = "/images/backgrounds/user.png"
     import NavBar from "$lib/components/navBar/navBar.svelte";
+    import Footer from "$lib/components/footer/footer.svelte";
     import Carousel from "$lib/components/carrousel/carousel.svelte";
     // @ts-ignore
     export let data ;
@@ -31,9 +32,10 @@
     let selectedImage = null;
 
 </script>
-<main>
+<main  class="flex flex-col min-h-screen">
     <NavBar/>
-    <nav class="bg-gray-400 p-4  ">
+    <div class="flex-1 container mx-auto ">
+      <nav class="bg-gray-400 p-2 w-full  ">
       <ul class="flex justify-center flex-wrap space-x-6 gap-4  font-bold text-center lg:space-x-[300px] ">
           <li>
             <button 
@@ -258,5 +260,8 @@
           </div>
         </div>
         {/if} 
-      </section>
+    </section>
+    </div>
+    
+    <Footer/>
 </main>

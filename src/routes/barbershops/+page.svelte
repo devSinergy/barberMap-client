@@ -2,6 +2,7 @@
 // @ts-nocheck
     import { onMount,onDestroy } from "svelte";
     import Loader from "$lib/loader/loader.svelte";
+    import Footer from "$lib/components/footer/footer.svelte";
     import "/src/global.css";
     const barbershopImg = "images/backgrounds/barbershop.png"
     import NavBar from "$lib/components/navBar/navBar.svelte";
@@ -169,4 +170,5 @@
           
     </section>
    {/if} 
+   <Footer />
 </main>
