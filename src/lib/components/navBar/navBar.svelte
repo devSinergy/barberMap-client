@@ -12,7 +12,6 @@
         try {
           const decoded = jwt_decode(token)
           const userRole = decoded.role
-          console.log(userRole)
           if(userRole=== 'develop'){
             showDash = true;
           }

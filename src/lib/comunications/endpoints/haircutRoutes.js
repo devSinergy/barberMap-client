@@ -21,7 +21,12 @@ export const getStoreHaircut = async(/** @type {any} */ barbershopid) =>{
 
 export const deleteHaircut = async(/** @type {any} */ id)=>{
     try {
-        const response = await apiHaircut.delete(`/${id}`);
+        const token = localStorage.getItem('Authtoken');
+        const response = await apiHaircut.delete(`/${id}`, {
+            headers: {
+                authorization: `Bearer ${token}`, // Incluye el token en los headers
+            },
+        });
         const message = response.data.message
         return message
     } catch (error) {

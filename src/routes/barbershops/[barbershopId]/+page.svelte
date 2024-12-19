@@ -4,8 +4,16 @@
     import Footer from "$lib/components/footer/footer.svelte";
     import Carousel from "$lib/components/carrousel/carousel.svelte";
     // @ts-ignore
-    export let data ;
-    const {detailStore,services,calendar,reviews,detailreviews,appoitmens,haircuts} = data
+    export let data = {};
+    const {
+        detailStore = {}, // Valores por defecto
+        services = [],
+        calendar = [],
+        reviews = {}, // reviews puede ser un objeto vacío
+        detailreviews = [],
+        appoitmens = [],
+        haircuts = [],
+    } = data;
     import "/src/global.css";
     let activeTab = 'info';  
     import Calendar from "$lib/components/calendar/calendar.svelte";
@@ -19,12 +27,13 @@
     ? `${$selectedDate.getFullYear()}-${($selectedDate.getMonth() + 1).toString().padStart(2, '0')}-${$selectedDate.getDate().toString().padStart(2, '0')}`
     : null;
 
-    $: filteredAppointments = appoitmens.filter((/** @type {{ date: string | number | Date; }} */ appointment) => {
-    const appointmentDate = new Date(appointment.date);
-    const formattedAppointmentDate = `${appointmentDate.getFullYear()}-${(appointmentDate.getMonth() + 1).toString().padStart(2, '0')}-${appointmentDate.getDate().toString().padStart(2, '0')}`;
-    return formattedAppointmentDate === selectedDateFormatted; // Comparar solo la fecha
-    
-    });
+    $: filteredAppointments = Array.isArray(appoitmens)
+    ? appoitmens.filter((/** @type {{ date: string | number | Date; }} */ appointment) => {
+        const appointmentDate = new Date(appointment.date);
+        const formattedAppointmentDate = `${appointmentDate.getFullYear()}-${(appointmentDate.getMonth() + 1).toString().padStart(2, '0')}-${appointmentDate.getDate().toString().padStart(2, '0')}`;
+        return formattedAppointmentDate === selectedDateFormatted;
+    })
+    : [];
     let showModal = false;
     /**
    * @type {null}
@@ -62,7 +71,8 @@
         <div class="flex flex-col lg:flex-row">
             <div>
               <div class="w-full lg:w-1/2 p-4 text-center">
-                <h2 class="text-xl font-semibold">{detailStore.name}</h2>
+                <h2 class="text-3xl font-semibold">{detailStore.name}</h2>
+                <p class="mt-4 text-xl">"{detailStore.slogan}"</p>
                 <p class="mt-2">{detailStore.addres},  {detailStore.postalcode}</p>
                 <div class="flex flex-col items-center ">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 mt-4 text-green-600">
@@ -71,22 +81,24 @@
                 <p class="mt-2">{detailStore.phonenumber}</p>
                 </div>
               
-                {#if reviews.promedio}
+                {#if reviews && reviews.promedio}
                 <p class="text-sm text-white mt-4 flex justify-center items-center">
-                   <span class="ml-2 flex ">
-                    {#each Array(5) as _, index}
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                        class="w-5 h-5 {index < Math.round(reviews.promedio) ? 'text-yellow-500' : 'text-gray-300'}"
-                      >
-                        <path d="M12 .587l3.668 7.429 8.2 1.179-5.917 5.761 1.396 8.144L12 18.897l-7.347 3.873 1.396-8.144-5.917-5.761 8.2-1.179z" />
-                      </svg>
-                    {/each}
-                  </span>
+                    <span class="ml-2 flex ">
+                        {#each Array(5) as _, index}
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                                class="w-5 h-5 {index < Math.round(reviews.promedio) ? 'text-yellow-500' : 'text-gray-300'}"
+                            >
+                                <path
+                                    d="M12 .587l3.668 7.429 8.2 1.179-5.917 5.761 1.396 8.144L12 18.897l-7.347 3.873 1.396-8.144-5.917-5.761 8.2-1.179z"
+                                />
+                            </svg>
+                        {/each}
+                    </span>
                 </p>
-              {:else}
+            {:else}
                 <p class="text-sm text-white mt-4">No hay reseñas disponibles.</p>
               {/if}
               </div> 
@@ -113,11 +125,11 @@
                                 {/each}
                             </tr>
                         {/each}
-                        {#if calendar[0].sunday === true}
-                            <tr class="border-b hover:bg-gray-100">
-                                <td class="px-4 py-2 text-sm">Domingo</td>
-                                <td class="px-4 py-2 text-sm" colspan="2">Cerrado</td>
-                            </tr>
+                        {#if calendar && calendar.length > 0 && calendar[0].sunday === true}
+                        <tr class="border-b hover:bg-gray-100">
+                            <td class="px-4 py-2 text-sm">Domingo</td>
+                            <td class="px-4 py-2 text-sm" colspan="2">Cerrado</td>
+                        </tr>
                         {/if}
                     </tbody>
                 </table>
@@ -180,59 +192,55 @@
             </div>
             <button
             on:click={() => (showModal = true)}
-            class="fixed bottom-6 right-6 bg-gray-900 hover:bg-gray-900 text-white font-bold py-3 px-6 rounded-full shadow-lg"
+            class="fixed bottom-[190px] right-6 bg-gray-900 hover:bg-gray-900 text-white font-bold py-3 px-6 rounded-full shadow-lg"
             >
             Ver Peinados
           </button>
           <!-- Modal -->
           {#if showModal}
-  <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-    <div class="bg-white rounded-lg shadow-lg max-w-lg w-[90%] ">
-      <div class="p-4 border-b flex justify-between items-center">
-        <h3 class="text-lg font-semibold ">Peinados Disponibles</h3>
-        <button on:click={() => (showModal = false)} class="text-gray-600 hover:text-gray-800">
-          ✖
-        </button>
-      </div>
+          <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div class="bg-white rounded-lg shadow-lg max-w-lg w-[90%] ">
+              <div class="p-4 border-b flex justify-between items-center">
+                <h3 class="text-lg font-semibold ">Peinados Disponibles</h3>
+                <button on:click={() => (showModal = false)} class="text-gray-600 hover:text-gray-800">
+                  ✖
+                </button>
+              </div>
 
-      <!-- Grid de peinados -->
-      <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {#each haircuts as haircut}
-          <div class="border rounded-lg p-2">
-            <div>
-              <img
-                src={haircut.images}
-                alt="corte"
-                class="w-full h-auto rounded-md cursor-pointer"
-                on:click={() => (selectedImage = haircut.images)}
-              />
-            </div>
-            <div class="text-center">
-              <p class="text-sm text-gray-600 mt-2">
-                Estilo: {haircut.style || 'No especificada'}
-              </p>
+              <!-- Grid de peinados -->
+              <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                {#each haircuts as haircut}
+                  <div class="border rounded-lg p-2 text-center flex flex-col gap-4 bg-gray-900">
+                      <p class="text-sm text-white">
+                        Estilo: {haircut.style || 'No especificada'}
+                      </p>
+                      <img
+                        src={haircut.images}
+                        alt="corte"
+                        class="w-full h-auto rounded-md cursor-pointer"
+                        on:click={() => (selectedImage = haircut.images)}
+                      />
+                    </div>
+                {/each}
+              </div>
             </div>
           </div>
-        {/each}
-      </div>
-    </div>
-  </div>
 
-  <!-- Imagen a pantalla completa -->
-  {#if selectedImage}
-    <div class="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
-      <div class="relative">
-        <button
-          on:click={() => (selectedImage = null)}
-          class="absolute top-4 right-4 text-white text-3xl"
-        >
-          ✖
-        </button>
-        <img src={selectedImage} alt="Imagen a pantalla completa" class="max-w-full max-h-full object-contain" />
-      </div>
-    </div>
-  {/if}
-{/if}
+          <!-- Imagen a pantalla completa -->
+          {#if selectedImage}
+            <div class="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
+              <div class="relative">
+                <button
+                  on:click={() => (selectedImage = null)}
+                  class="absolute top-4 right-4 text-white text-3xl"
+                >
+                  ✖
+                </button>
+                <img src={selectedImage} alt="Imagen a pantalla completa" class="max-w-full max-h-full object-contain" />
+              </div>
+            </div>
+          {/if}
+          {/if}
           {/each}
         </div>
         {:else if activeTab === 'dates'}

@@ -1,3 +1,4 @@
+
 import apiReviews from "../axiosReviews";
 
 export const getStoreReview = async(/** @type {any} */ barbershopid) =>{
@@ -19,5 +20,20 @@ export const showReviews = async(barbershopid) =>{
     } catch (error) {
         console.error('Fallo al obtener las valoraciones:', error);
         throw error;
+    }
+}
+
+export const deleteReviews = async(/** @type {any} */ id)=>{
+    try {
+        const token = localStorage.getItem('Authtoken');
+        const response = await apiReviews.delete(`/${id}`, {
+            headers: {
+                authorization: `Bearer ${token}`, // Incluye el token en los headers
+            },
+        })
+        const message = response.data.message
+        return message
+    } catch (error) {
+        throw error
     }
 }
