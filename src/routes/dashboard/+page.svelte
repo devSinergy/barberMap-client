@@ -10,6 +10,7 @@
     import { goto } from "$app/navigation";
     import AppoitmentsForm from "$lib/components/appointmentsForm/appoitmentsForm.svelte";
     import ServicesForm from "$lib/components/servicesForm/servicesForm.svelte";
+  import UserForm from "$lib/components/createuserForm/userForm.svelte";
     
     export let data;
     let editForm = {title:'',description:'',price:''}
@@ -18,6 +19,7 @@
     let showModal = false;
     let showEditModal = false;
     let showServiceModal = false;
+    let showUserModal = false;
     // @ts-ignore
     let appointments = [];
     // @ts-ignore
@@ -98,6 +100,13 @@
         showServiceModal = false;
     }
 
+    const openUserModal = () =>{
+        showUserModal = true;
+    }
+
+    const closeUserModal = () =>{
+        showUserModal = false;
+    }
     const saveEdit = async () => {
         try {
             const updatedService = await updateServices(editForm._id, {
@@ -136,16 +145,26 @@
         <nav>
             <ul class="flex flex-col gap-6 ">
                 <li>
+                    <UserForm {barbershopid} showUser={showUserModal} close={closeUserModal}/>
+                    <button on:click={openUserModal} aria-label="user">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 ml-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                          </svg>
+                          
+                    </button>
+                    
+                </li>
+                <li>
                     <button on:click={goto('/barbershops')}
                     aria-label="goto">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 ml-4 mt-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 ml-4 ">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z" />
                           </svg>
                     </button>
                 </li>
                 <li>
                     <button 
-                        class="w-full p-2 text-left hover:bg-gray-700 cursor-pointer underline underline-offset-8"
+                        class="w-full p-1 text-left hover:bg-white hover:rounded-xl hover:text-black cursor-pointer underline underline-offset-8"
                         class:selected={activeTab === 'appointments'}
                         on:click={() => activeTab = 'appointments'}
                         aria-pressed={activeTab === 'appointments'}>
@@ -154,7 +173,7 @@
                 </li>
                 <li>
                     <button 
-                        class="w-full p-2 text-left hover:bg-gray-700 cursor-pointer underline underline-offset-8"
+                        class="w-full p-1 text-left hover:bg-white hover:rounded-xl hover:text-black cursor-pointer underline underline-offset-8"
                         class:selected={activeTab === 'servicios'}
                         on:click={() => activeTab = 'servicios'}
                         aria-pressed={activeTab === 'servicios'}>
@@ -163,7 +182,7 @@
                 </li>
                 <li>
                     <button 
-                        class="w-full p-2 text-left hover:bg-gray-700 cursor-pointer underline underline-offset-8"
+                        class="w-full p-1 text-left hover:bg-white hover:rounded-xl hover:text-black cursor-pointer underline underline-offset-8"
                         class:selected={activeTab === 'haircuts'}
                         on:click={() => activeTab = 'haircuts'}
                         aria-pressed={activeTab === 'haircuts'}>
@@ -172,7 +191,7 @@
                 </li>
                 <li>
                     <button 
-                        class="w-full p-2 text-left hover:bg-gray-700 cursor-pointer underline underline-offset-8"
+                        class="w-full p-1 text-left hover:bg-white hover:rounded-xl hover:text-black cursor-pointer underline underline-offset-8"
                         class:selected={activeTab === 'reviews'}
                         on:click={() => activeTab = 'reviews'}
                         aria-pressed={activeTab === 'reviews'}>
@@ -181,7 +200,7 @@
                 </li>
                 
                 <li>
-                    <button class="w-full p-2 text-left hover:bg-gray-700 cursor-pointer "
+                    <button class="w-full p-1 text-left  hover:bg-white hover:rounded-xl hover:text-black cursor-pointer "
                     on:click={logout}>
                         Cerrar sesion
                     </button>
@@ -307,6 +326,6 @@
     </section>  
     
     </div><!-- Barra lateral -->
-   
+    
     <Footer />
 </main>
