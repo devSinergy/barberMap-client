@@ -301,19 +301,19 @@
           {#if showModal}
           <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
             <div class="bg-white rounded-lg shadow-lg max-w-lg w-[90%] ">
-              <div class="p-4 border-b flex justify-between items-center">
+              <div class="p-4 border-b flex justify-around items-center">
                 <h3 class="text-lg font-semibold ">Peinados Disponibles</h3>
-                <button on:click={() => (showModal = false)} class="text-gray-600 hover:text-gray-800">
+                <button on:click={() => (showModal = false)} class="text-gray-600 hover:text-gray-800 justify-sel">
                   ✖
                 </button>
               </div>
 
               <!-- Grid de peinados -->
-              <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+              <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4  p-2 bg-gray-900">
                 {#each haircuts as haircut}
-                  <div class="border rounded-lg p-2 text-center flex flex-col gap-4 bg-gray-900">
-                      <p class="text-sm text-white">
-                        Estilo: {haircut.style || 'No especificada'}
+                  <div class="border rounded-lg p-2 text-center flex flex-col gap-4 bg-white mt-2">
+                      <p class="text-sm text-gray-900 ">
+                         {haircut.style || 'No especificada'}
                       </p>
                       <img
                         src={haircut.images}
@@ -351,7 +351,7 @@
             Aquí puedes ver información y disponibilidad de horas
           </p>
           <div>
-            <button on:click={openModal} class="text-2xl bg-blue-700 rounded-lg p-2 text-white mb-4">Pedir cita</button>
+            <button on:click={openModal} class="text-2xl bg-blue-400 border-blue-700 border-2 rounded-lg p-2 text-white mb-4">Pedir cita</button>
           </div> 
           {#if showDateModal}
             <div class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" on:click={closeModal}>

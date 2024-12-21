@@ -93,14 +93,14 @@
         </a>
       {/if}
     </div>
-    <div>
+    <div class="flex flex-raw gap-1 items-center">
+      <div>
       {#if showLogout}
       <button aria-label="logout" on:click={logout} class="bg-white text-gray-900 p-1 rounded-lg font-bold">
         Cerrar sesion
       </button>
       {/if}
     </div>
-    
     <div class="flex items-center space-x-4">
       <a 
         href="/" 
@@ -112,6 +112,8 @@
       </svg>
     </a>
     </div>
+    </div>
+    
     
     
   </nav>
