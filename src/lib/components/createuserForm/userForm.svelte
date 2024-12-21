@@ -3,16 +3,16 @@
     export let barbershopid
     export let showUser = false
     export let close
-    let formUser = {name:'',userphone:'',password:''}
+    let formUser = {name:'',phonenumber:'',password:''}
 
     const addUser = async() =>{
-        if(!formUser.name || !formUser.userphone || !formUser.password){
+        if(!formUser.name || !formUser.phonenumber || !formUser.password){
             alert("Por favor, completa todos los campos.");
             return;
         }
         try {
             const response = await createUser(formUser,barbershopid);
-            formUser = {name:'',userphone:'',password:''}
+            formUser = {name:'',phonenumber:'',password:''}
             const message = response.message;
             close()
             alert(message)
@@ -39,7 +39,7 @@
                 </label>
                 <label>
                     Telefono
-                    <input type="number" bind:value={formUser.userphone} placeholder="Telefono" class="border rounded p-2 w-full mt-1" />
+                    <input type="number" bind:value={formUser.phonenumber} placeholder="Telefono" class="border rounded p-2 w-full mt-1" />
                 </label>
                 <label>
                     Contraseña
