@@ -39,3 +39,19 @@ export const createService = async (serviceForm,barbershopid) =>{
         throw error
     }
 }
+
+export const deleteService = async (id) => {
+    try {
+        const token = localStorage.getItem('Authtoken'); // Obtén el token del localStorage
+        const response = await apiService.delete(`/${id}`, {
+            headers: {
+                authorization: `Bearer ${token}`, // Incluye el token en los headers
+            },
+        });
+        const message = response.data.message;
+        return message;
+    } catch (error) {
+        console.error('Error al eliminar la cita:', error.response?.data || error.message);
+        throw error; // Opcional: lanzar el error para manejarlo en el llamado
+    }
+};

@@ -97,7 +97,7 @@
     
     <section class="p-6 bg-white">
         <div>
-          <img src="{barbershopImg}" alt="barbershopbg" class="h-[25vh] ml-[5%]">
+          <img src="{barbershopImg}" alt="barbershopbg" class="h-[20vh] ml-[14%]">
         </div>
         <form class="mb-6 mt-6 grid grid-cols-2 gap-6 items-start bg-white p-4 rounded-lg shadow-md lg:gap-[200px] lg:flex-row">
             

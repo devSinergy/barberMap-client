@@ -92,7 +92,7 @@
                   id="phone"
                   type="text"
                   bind:value={phonenumber}
-                  class="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-gray-900"
+                  class="w-full px-4 mt-2 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-gray-900"
                   placeholder="Teléfono"
               />
               {#if phoneError}
@@ -107,7 +107,7 @@
                   id="password"
                   type="password"
                   bind:value={password}
-                  class="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full mt-2 px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                   placeholder="********"
               />
               {#if passwordError}
@@ -115,27 +115,27 @@
               {/if}
           </div>
           <div class="mb-4">
-            <span class="block text-sm font-medium text-gray-700 mb-4">Selecciona tu tipo de cuenta</span>
+            <span class="block text-l font-medium text-gray-700 mb-4">Selecciona tu tipo de cuenta:</span>
             <div class="flex flex-col justify-around mt-2">
                 <div class ="flex flex-row justify-around">
-                    <label class="flex items-center mb-2">
-                <input
-                    type="radio"
-                    bind:group={loginType}
-                    value="barber"
-                    class="mr-2"
-                />
-                Soy Barbero
-                </label>
-                <label class="flex items-center mb-2">
-                    <input
-                        type="radio"
-                        bind:group={loginType}
-                        value="cliente"
-                        class="mr-2"
-                    />
-                    Soy Cliente
-                </label>
+                    <label class="flex items-center mb-2 bg-gray-900 text-white p-3 rounded-lg">
+                        <input
+                            type="radio"
+                            bind:group={loginType}
+                            value="barber"
+                            class="mr-2"
+                        />
+                        Soy Barbero
+                      </label>
+                     <label class="flex items-center mb-2 bg-gray-900 text-white p-3 rounded-lg">
+                        <input
+                            type="radio"
+                            bind:group={loginType}
+                            value="cliente"
+                            class="mr-2"
+                        />
+                        Soy Cliente
+                     </label>
                 </div>
                
                 <div>
@@ -151,7 +151,7 @@
           <div class="mt-6">
               <button
                   type="submit"
-                  class="w-full py-2 px-4 bg-gray-900 text-white font-semibold rounded-md hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-opacity-50"
+                  class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-opacity-50"
               >
                   Iniciar Sesión
               </button>
