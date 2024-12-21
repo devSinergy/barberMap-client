@@ -59,29 +59,32 @@
   let isLoading = true ;
 
   onMount(() => {
-  if (!data.barberShops || data.barberShops.length === 0) {
+  if (data.barberShops && data.barberShops.length > 0) {
+    filteredBarberShops = [...data.barberShops];
+    isLoading = false;
+  } else {
+    // Usar setInterval y setTimeout como ya tenías, o directamente aplicar un filtro reactivo
     const interval = setInterval(() => {
       if (data.barberShops && data.barberShops.length > 0) {
-        localBarberShops = data.barberShops;
+        filteredBarberShops = [...data.barberShops];
         isLoading = false;
         clearInterval(interval);
       }
     }, 500);
 
     const timeout = setTimeout(() => {
-      isLoading = false; // O un mensaje de error si no llegan datos
+      isLoading = false;
       clearInterval(interval);
-    }, 13000);
+    }, 15000);
 
-    // Limpia los intervalos si el componente se destruye
+    // Limpieza de los intervalos si el componente se destruye
     onDestroy(() => {
       clearInterval(interval);
       clearTimeout(timeout);
     });
-  } else {
-    isLoading = false;
   }
 });
+
 
  
 </script>

@@ -14,7 +14,7 @@ export const sendForm = async (/** @type {{ phonenumber: Number; password: strin
         if (response.ok) {
             // Acceder a los encabezados de la respuesta
             const authHeader = response.headers.get('Authorization');
-
+            const authUserHeader = response.headers.get('authUser')
             // Verificar si el encabezado Authorization existe
             if (authHeader) {
                 // Extraer el token (formato: 'Bearer <token>')
@@ -23,8 +23,12 @@ export const sendForm = async (/** @type {{ phonenumber: Number; password: strin
                     // Guardar el token en localStorage
                     localStorage.setItem('Authtoken', token);   
                 }
-            } else {
-                console.error('No se encontró el token en la respuesta');
+            }
+            if(authUserHeader){
+                const token = authUserHeader.split(' ')[1];
+                if(token){
+                    localStorage.setItem('authUser',token)
+                }
             }
 
             // Devolver los datos de la respuesta (si es necesario)
@@ -36,3 +40,4 @@ export const sendForm = async (/** @type {{ phonenumber: Number; password: strin
         console.error('Error al enviar el formulario:', error);
     }
 };
+

@@ -4,6 +4,7 @@
   import jwt_decode from 'jwt-decode'; 
   let menuOpen = false; // Variable para controlar si el menú está abierto o cerrado
   let showDash = false;
+  let showLogout = false;
 
   function decodeToken () {
     try {
@@ -23,13 +24,41 @@
 
     } catch (error) {
       console.error("Error al ejecutar  la funcion decodetoken")
-    }
-    
+    }   
   }
+
+  function decodeUserToken () {
+    try {
+      const token = localStorage.getItem('authUser')
+      if(token){
+        try {
+          const decoded = jwt_decode(token)
+          const userRole = decoded.role
+          if(userRole=== 'client'){
+            showLogout = true;
+          }
+        } catch (error) {
+          console.error("Error al decodificar el token:", error);
+          showLogout = false;
+        }
+    } 
+    } catch (error) {
+      
+    }
+  }
+
+  function logout() {
+    
+    localStorage.removeItem('authUser');
+    window.location.href = '/';
+    };
+
+
   function toggleMenu() {
     menuOpen = !menuOpen; // Cambia el estado de visibilidad
   }
   decodeToken();
+  decodeUserToken();
 </script>
 
 <main class="bg-gray-900 text-white px-6 py-4">
@@ -53,7 +82,7 @@
       <a href="/about-us" class="hover:text-gray-400">About Us</a>
     </div>
     
-    <!-- Logo en el centro -->
+   
     <div>
       {#if showDash}
         <a href="/dashboard" class="p-2 text-white hover:bg-gray-800 rounded flex items-center justify-center" aria-label="dashboard">
@@ -64,23 +93,26 @@
         </a>
       {/if}
     </div>
+    <div>
+      {#if showLogout}
+      <button aria-label="logout" on:click={logout} class="bg-white text-gray-900 p-1 rounded-lg font-bold">
+        Cerrar sesion
+      </button>
+      {/if}
+    </div>
     
-    <!-- Ícono de búsqueda -->
     <div class="flex items-center space-x-4">
-      <!-- Buscar: Podrías importar el componente Search aquí en el futuro -->
       <a 
         href="/" 
         class="p-2 text-white hover:bg-gray-800 rounded flex items-center justify-center" 
         aria-label="Ir a la página principal"
       >
-  <!-- Ícono de casa -->
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
         <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
       </svg>
-      
     </a>
-
     </div>
+    
     
   </nav>
 

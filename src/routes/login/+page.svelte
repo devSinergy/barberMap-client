@@ -5,8 +5,10 @@
   let loginBackground = "/images/backgrounds/fondologin.jpg";
   let phonenumber = '';
   let password = '';
+  let loginType ='';
   let phoneError = '';
   let passwordError = '';
+  let loginTypeError = '';
   let showModal = false;
   let modalMessage = '';
 
@@ -33,32 +35,43 @@
       } else {
           passwordError = '';
       }
+      if (!loginType) {
+          loginTypeError = 'Debes seleccionar si eres barbero o cliente.';
+          isValid = false;
+      } else {
+          loginTypeError = '';
+      }
 
       if (isValid) {
-          const formData = { phonenumber, password };
+          const formData = { phonenumber, password ,loginType};
 
           try {
               // @ts-ignore
               const response = await sendForm(formData);
 
               if (response) {
-                  modalMessage = `Bienvenido, Bro!`;
+                  modalMessage = `Bienvenido, ${loginType === 'barber' ? 'Barbero' : 'Cliente'}!`;
                   showModal = true;
 
                   // Redirigir después de un breve retraso para mostrar el modal
                   setTimeout(() => {
-                      showModal =false;
-                      goto('/dashboard'); // Redirige al dashboard
+                      showModal = false;
+
+                      // Redirigir según el tipo de cuenta
+                      if (loginType === 'barber') {
+                          goto('/dashboard'); // Ruta para barberos
+                      } else if (loginType === 'cliente') {
+                          goto('/barbershops'); // Ruta para clientes
+                      }
                   }, 3000);
-              } else {
-                  alert("Error: " + response.message);
-              }
+              } 
           } catch (error) {
               console.error("Error al enviar los datos", error);
               alert("Hubo un error al enviar el formulario.");
           }
       }
   };
+ 
 </script>
 
 <main class="flex flex-col min-h-screen p-1">
@@ -70,7 +83,7 @@
   <!-- Sección del Formulario (mitad inferior) -->
   <div class="h-1/2 flex items-center justify-center bg-white">
       <form on:submit={handleSubmit} class="max-w-md w-full p-6 border rounded-lg shadow-lg">
-          <h2 class="text-2xl font-semibold text-center mb-6">Login</h2>
+          <h2 class="text-3xl font-semibold text-center mb-6  text-black p-2">Login</h2>
 
           <!-- Campo de Teléfono -->
           <div class="mb-4">
@@ -101,7 +114,39 @@
                   <p class="text-sm text-red-500 mt-1">{passwordError}</p>
               {/if}
           </div>
-
+          <div class="mb-4">
+            <span class="block text-sm font-medium text-gray-700 mb-4">Selecciona tu tipo de cuenta</span>
+            <div class="flex flex-col justify-around mt-2">
+                <div class ="flex flex-row justify-around">
+                    <label class="flex items-center mb-2">
+                <input
+                    type="radio"
+                    bind:group={loginType}
+                    value="barber"
+                    class="mr-2"
+                />
+                Soy Barbero
+                </label>
+                <label class="flex items-center mb-2">
+                    <input
+                        type="radio"
+                        bind:group={loginType}
+                        value="cliente"
+                        class="mr-2"
+                    />
+                    Soy Cliente
+                </label>
+                </div>
+               
+                <div>
+                {#if loginTypeError}
+                    <p class="text-sm text-red-500 mt-1">{loginTypeError}</p>
+                {/if}    
+                </div>
+            
+            </div>
+            
+        </div>
           <!-- Botón de Enviar -->
           <div class="mt-6">
               <button

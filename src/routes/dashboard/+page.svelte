@@ -316,7 +316,7 @@
                             <p class="text-lg font-semibold"><strong>Cliente:</strong> {client}</p>
                             <p class="text-sm text-gray-600 mt-2"><strong>Comentario:</strong> {comment}</p>
                             <p class="text-sm text-yellow-500 mt-2"><strong>Puntuación:</strong> {puntuation}</p>
-                            <button class="bg-red-700 text-white p-2 mt-4 rounded-lg" on:click={() => deleteReviews(_id)}>Eliminar</button>
+                            <!-- <button class="bg-red-700 text-white p-2 mt-4 rounded-lg" on:click={() => deleteReviews(_id)}>Eliminar</button> -->
                         </div>
                     </li>
                     {/each}

@@ -1,8 +1,12 @@
 <script>
+    // @ts-ignore
+    import jwt_decode from 'jwt-decode';
+    import { goto } from '$app/navigation';
     let userImg = "/images/backgrounds/user.png"
     import NavBar from "$lib/components/navBar/navBar.svelte";
     import Footer from "$lib/components/footer/footer.svelte";
     import Carousel from "$lib/components/carrousel/carousel.svelte";
+    // @ts-ignore
     // @ts-ignore
     export let data = {};
     const {
@@ -18,7 +22,10 @@
     let activeTab = 'info';  
     import Calendar from "$lib/components/calendar/calendar.svelte";
     import { selectedDate } from "$lib/components/calendar/calendarStore.js";
+    
+    // @ts-ignore
     let selected;
+    // @ts-ignore
     // @ts-ignore
     // @ts-ignore
     $: selected = $selectedDate ? $selectedDate.toDateString() : 'No hay fecha seleccionada';
@@ -39,6 +46,100 @@
    * @type {null}
    */
     let selectedImage = null;
+  
+    //**Codigo para crear cita
+
+   
+    let date = "";
+    let hour = "";
+    const lapsetime = 30; // lapsetime por defecto siempre será 30
+    let barbershopid = ""; // Será recogido desde la ruta
+    let clientname = "";
+
+    let showDateModal = false;
+
+// Abrir modal
+    function openModal() {
+      try {
+        const token = localStorage.getItem('authUser');
+       if (!token) {
+      // Si no hay token, redirigir al login
+      goto('/login');
+      return;
+    }
+      } catch (error) {
+      }
+      showDateModal = true;
+    }
+
+    // Cerrar modal
+    function closeModal() {
+      showDateModal = false;
+    }
+
+    function crateDate() {
+    try {
+    // Verificar si hay un token en localStorage
+    const token = localStorage.getItem('authUser');
+    if (!token) {
+      // Si no hay token, redirigir al login
+      goto('/login');
+      return;
+    }
+
+    // Decodificar el token para obtener el nombre del usuario (clientname)
+    const decoded = jwt_decode(token);
+    const username = decoded.name;
+
+    // Verificar que el formulario esté completo
+    if (!date || !hour) {
+      alert("Por favor, complete todos los campos.");
+      return;
+    }
+
+    // Obtener barbershopid de la ruta
+    const barbershopid = window.location.pathname.split('/')[2]; // Ajusta según cómo esté estructurada tu URL
+
+    // Construir el objeto de la cita
+    const appointmentData = {
+      barbershopid,
+      clientname: username, // Nombre del cliente obtenido desde el token
+      date,
+      hour,
+      lapsetime: 30, // lapsetime fijo en 30 minutos
+    };
+    // Enviar los datos al servidor
+    fetch('https://barbermap-server.onrender.com/appoitmens', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(appointmentData),
+      
+    })
+    
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert("Cita creada exitosamente.");
+          // Redirigir a la página de la barbería
+          goto(`/barbershop/${barbershopid}`);
+        } else {
+          alert("Tu cita se ha creado correctamente");
+        }
+      })
+      .catch(error => {
+        console.error('Error al crear la cita:', error);
+        alert("Hubo un problema con la creación de la cita.");
+      });
+      closeModal();
+  } catch (error) {
+    console.error("Error al decodificar el token:", error);
+    // En caso de error al decodificar el token, redirigir al login
+    goto('/login');
+  }
+}
+
 
 </script>
 <main  class="flex flex-col min-h-screen">
@@ -244,13 +345,52 @@
           {/each}
         </div>
         {:else if activeTab === 'dates'}
-        <div class="p-4">
+        <div class="p-4 flex flex-col items-center">
           <h2 class="text-2xl font-bold mb-4 text-center underline underline-offset-8">Citas</h2>
-          <p class="text-gray-600 mb-6 mt-6 p-4 text-center ">
+          <p class="text-gray-600 mb-2 mt-6 p-4 text-center ">
             Aquí puedes ver información y disponibilidad de horas
           </p>
+          <div>
+            <button on:click={openModal} class="text-2xl bg-blue-700 rounded-lg p-2 text-white mb-4">Pedir cita</button>
+          </div> 
+          {#if showDateModal}
+            <div class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" on:click={closeModal}>
+              <div class="bg-white p-6 rounded-lg w-96" on:click|stopPropagation>
+                <h2 class="text-xl font-semibold text-gray-700 mb-4">Crear Cita</h2>
+                <form on:submit|preventDefault={crateDate}>
+                  <!-- Campo de Fecha -->
+                  <div class="mb-4">
+                    <label for="date" class="block text-sm font-medium text-gray-600">Fecha</label>
+                    <input id="date" type="date" bind:value={date} class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required />
+                  </div>
+
+                  <!-- Campo de Hora -->
+                  <div class="mb-4">
+                    <label for="hour" class="block text-sm font-medium text-gray-600">Hora</label>
+                    <input id="hour" type="time" bind:value={hour} step="1800" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required />
+                  </div>
+
+                  <!-- Campo de Lapso de Tiempo (Fijo) -->
+                  <div class="mb-6">
+                    <label for="lapsetime" class="block text-sm font-medium text-gray-600">Lapso de tiempo (minutos)</label>
+                    <input id="lapsetime" type="number" value={lapsetime} disabled class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100 cursor-not-allowed" />
+                  </div>
+
+                  <!-- Botones -->
+                  <div class="flex justify-around mt-4">
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+                      Crear cita
+                    </button>
+                    <button type="button" on:click={closeModal} class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition">
+                      Cancelar
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          {/if}
           <Calendar />
-          <div class="grid  grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 ml-4 w-[90%] ">
+          <div class="grid  grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4  w-[90%] ">
                     {#if filteredAppointments.length > 0}
           {#each filteredAppointments as dates}
             <div class="bg-white shadow-md rounded-lg p-4 flex flex-col gap-2 ">
