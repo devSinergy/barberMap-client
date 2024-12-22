@@ -10,7 +10,7 @@
         <h1 class="text-2xl font-bold underline underline-offset-8">Contacto</h1>
     </div>
     <div class="bg-gray-900 mt-6 rounded-lg w-[90%]">
-        <img src={fondoContacto} alt="fondo">
+        <img class="hover:scale-150"  src={fondoContacto} alt="fondo">
     </div>
     <div class="text-gray-900 mt-4 font-">
         <h1 class="font-bold text-[40px] ">Eduardo Silva</h1>

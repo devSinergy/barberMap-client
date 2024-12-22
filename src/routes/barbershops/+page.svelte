@@ -95,7 +95,7 @@
   {#if !isLoading}
     <NavBar />
     
-    <section class="p-6 bg-white">
+    <section class="p-4 bg-white">
         <div>
           <img src="{barbershopImg}" alt="barbershopbg" class="h-[20vh] ml-[14%]">
         </div>
@@ -118,7 +118,7 @@
               Limpiar
             </button>
         </form>
-          <h1 class="text-2xl font-bold text-center mb-6">Lista de Barberías</h1>
+          <h1 class="text-2xl  font-bold text-center mb-6 rounded-xl p-1 bg-gray-900 text-white ">Barberías</h1>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
             {#if filteredBarberShops.length > 0}
               {#each filteredBarberShops as barbershop}
