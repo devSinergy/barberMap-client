@@ -168,7 +168,7 @@
     </nav>
     <section>
         {#if activeTab === 'info'}
-        <div class="text-2xl text-center mt-4 mb-2 font-serif font-semibold underline underline-offset-8">
+        <div class="text-2xl text-center mt-4  font-serif font-semibold underline underline-offset-8">
           <h2>Información</h2>
         </div>
         <div class="flex flex-col lg:flex-row">
@@ -205,9 +205,9 @@
                 <p class="text-sm text-white mt-4">No hay reseñas disponibles.</p>
               {/if}
               </div> 
-              <div class="overflow-x-auto p-4">
-                  <div class="p-4 rounded-md ">
-                      <p class="text-xl text-red-600 text-center font-bold text-animated">{calendar[0].especialday}</p>
+              <div class="overflow-x-auto p-4 ">
+                  <div class="p-2 rounded-md mb-3">
+                      <p class="text-2xl text-red-600 text-center font-bold text-animated">{calendar[0].especialday}</p>
                   </div>
                 <table class="min-w-full table-auto bg-white shadow-md rounded-lg">
                     <thead class="bg-gray-800 text-white">
