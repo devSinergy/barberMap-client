@@ -7,6 +7,7 @@
     import { getStoreHaircut ,deleteHaircut} from "$lib/comunications/endpoints/haircutRoutes";
     import { getServices,updateServices,deleteService } from "$lib/comunications/endpoints/servicesRoutes.js";
     import { showReviews,deleteReviews } from "$lib/comunications/endpoints/reviewsRoutes";
+    import { addEspecialDay } from "$lib/comunications/endpoints/calendarRoutes.js";
     import { goto } from "$app/navigation";
     import AppoitmentsForm from "$lib/components/appointmentsForm/appoitmentsForm.svelte";
     import ServicesForm from "$lib/components/servicesForm/servicesForm.svelte";
@@ -14,12 +15,14 @@
     
     export let data;
     let editForm = {title:'',description:'',price:''}
+    let especialday = "";
     const barbershopid = data?.barbershopid || ''; 
     let activeTab = 'appointments';
     let showModal = false;
     let showEditModal = false;
     let showServiceModal = false;
     let showUserModal = false;
+    let showCalendarModal = false;
     // @ts-ignore
     let appointments = [];
     // @ts-ignore
@@ -117,6 +120,15 @@
     const closeUserModal = () =>{
         showUserModal = false;
     }
+
+    const openCalendar = () =>{
+        showCalendarModal = true;
+    }
+
+    const closeCalendar = () =>{
+        showCalendarModal = false;
+    }
+
     const saveEdit = async () => {
         try {
             const updatedService = await updateServices(editForm._id, {
@@ -131,6 +143,16 @@
             closeEditModal(); // Cerrar el modal después de guardar
         } catch (error) {
             console.error('Error updating service:', error);
+        }
+    };
+
+    const saveSpecialDay = async () => {
+        try {
+            const updateCalendar = await addEspecialDay(barbershopid, especialday);
+            console.log("Día especial actualizado:", updateCalendar);
+            closeCalendar(); // Cerrar el modal tras guardar
+        } catch (error) {
+            console.error("Error al guardar el día especial:", error);
         }
     };
 
@@ -251,7 +273,45 @@
             {/if}
             {#if activeTab === 'servicios'}
                 <h2 class="text-xl font-bold mb-4">Servicios</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                <div class="  flex flex-row p-1 gap-4 ">
+                    <button 
+                        class="bg-gray-900 text-white p-2 rounded-lg mt-4 w-1/2"
+                        on:click={openServiceModal}>
+                        Crear nuevo servicio
+                    </button>
+                    
+                    <ServicesForm {barbershopid} show={showServiceModal} closeModal={closeServiceModal} />
+                    <button aria-label="editar dia"class="bg-gray-900 text-white p-2 rounded-lg mt-4 w-1/2"
+                    on:click={openCalendar} >
+                    Añadir horario especial
+                    </button>
+                    {#if showCalendarModal}
+                    <div class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+                        <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col justify-center w-[400px]">
+                            <h2 class="text-lg font-bold mb-4 text-center">Añadir Día Especial</h2>
+                            <input 
+                                type="text" 
+                                placeholder="Escribe el día especial"
+                                bind:value={especialday}
+                                class="border p-2 w-full mb-4 rounded"
+                            />
+                            <div class="flex justify-center gap-4">
+                                <button 
+                                    class="bg-gray-500 text-white p-2 rounded-lg"
+                                    on:click={closeCalendar}>
+                                    Cancelar
+                                </button>
+                                <button 
+                                    class="bg-blue-500 text-white p-2 rounded-lg"
+                                    on:click={saveSpecialDay}>
+                                    Guardar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                      {/if}
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-3">
                     {#each services as {_id, title,description,price }}
                         <div class="bg-white flex flex-col items-center p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
                             <div class="bg-gray-900 flex flex-row justify-around text-white p-1 w-full">
@@ -268,14 +328,6 @@
                           
                         </div>
                     {/each}
-                </div>
-                <div>
-                    <button 
-                        class="bg-gray-900 text-white p-2 rounded-lg mt-4 fixed bottom-4 right-6"
-                        on:click={openServiceModal}>
-                        Crear nuevo servicio
-                    </button>
-                    <ServicesForm {barbershopid} show={showServiceModal} closeModal={closeServiceModal} />
                 </div>
                 {#if showEditModal} <!-- Solo mostrar el modal si showEditModal es true -->
                     <div class="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">

@@ -16,6 +16,7 @@ export async function load({ params }) {
             showReviews(id),
             showAppoitmens(id),
             getStoreHaircut(id),
+            
         ]);
         return { detailStore, services,calendar,reviews,detailreviews,appoitmens,haircuts };
     } catch (error) {

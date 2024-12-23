@@ -1,4 +1,5 @@
 <script>
+    import "/src/global.css";
     import NavBar from "$lib/components/navBar/navBar.svelte";
     import Footer from "$lib/components/footer/footer.svelte";
     const fondoContacto = "images/backgrounds/contacto.png"

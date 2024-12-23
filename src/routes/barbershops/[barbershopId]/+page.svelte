@@ -1,4 +1,6 @@
 <script>
+// @ts-nocheck
+
     // @ts-ignore
     import jwt_decode from 'jwt-decode';
     import { goto } from '$app/navigation';
@@ -166,7 +168,7 @@
     </nav>
     <section>
         {#if activeTab === 'info'}
-        <div class="text-2xl text-center mt-4 mb-4 font-serif font-semibold underline underline-offset-8">
+        <div class="text-2xl text-center mt-4 mb-2 font-serif font-semibold underline underline-offset-8">
           <h2>Información</h2>
         </div>
         <div class="flex flex-col lg:flex-row">
@@ -204,6 +206,9 @@
               {/if}
               </div> 
               <div class="overflow-x-auto p-4">
+                  <div class="p-4 rounded-md ">
+                      <p class="text-xl text-red-600 text-center font-bold text-animated">{calendar[0].especialday}</p>
+                  </div>
                 <table class="min-w-full table-auto bg-white shadow-md rounded-lg">
                     <thead class="bg-gray-800 text-white">
                         <tr>
@@ -234,7 +239,7 @@
                         {/if}
                     </tbody>
                 </table>
-            </div>
+              </div>
             </div>
             <div class="w-full lg:w-1/2 p-4">
               <Carousel images={detailStore.images} />
@@ -436,4 +441,23 @@
   .vibrar {
     animation: vibracion 3s ease-in-out infinite;
   }
+
+  @keyframes text-move {
+  0% {
+    transform: translateX(100%);
+  }
+  50% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(-1%);
+  }
+}
+
+.text-animated {
+  display: inline-block; /* Para asegurarse de que el movimiento se aplique correctamente */
+  white-space: nowrap;   /* Evita que el texto salte a otra línea */
+  overflow: hidden;
+  animation: text-move 10s linear infinite; /* Duración de 5s, repetición infinita */
+}
 </style>
