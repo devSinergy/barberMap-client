@@ -11,7 +11,7 @@
     import { goto } from "$app/navigation";
     import AppoitmentsForm from "$lib/components/appointmentsForm/appoitmentsForm.svelte";
     import ServicesForm from "$lib/components/servicesForm/servicesForm.svelte";
-  import UserForm from "$lib/components/createuserForm/userForm.svelte";
+     import UserForm from "$lib/components/createuserForm/userForm.svelte";
     
     export let data;
     let editForm = {title:'',description:'',price:''}
@@ -32,6 +32,8 @@
 
     let services = [];
     let loading = true;
+    let filterDate = ""; // Para almacenar el valor del input de fecha
+    let filterHour = ""; // Para almacenar el valor del input de hora
 
     // Función para obtener datos
     const fetchData = async () => {
@@ -169,6 +171,11 @@
     const closeModal = () => {
         showModal = false;
     };
+
+    $: filteredAppointments = appointments.filter(app => {
+        return (!filterDate || new Date(app.date).toISOString().split('T')[0] === filterDate) &&
+               (!filterHour || app.hour === filterHour);
+    });
 </script>
 
 <main >
@@ -248,19 +255,33 @@
         {:else}
             {#if activeTab === 'appointments'}
             <h2 class="text-xl font-bold mb-4">Citas</h2>
+            <div class="flex flex-row mb-4">
+                <label class="text-center">
+                     Fecha: 
+                    <input type="date" bind:value={filterDate} class="border-2 border-gray-900 p-2 rounded-lg" />
+                </label>
+                <label class="text-center">
+                    Hora: 
+                    <input type="time" bind:value={filterHour} class="border-2 border-gray-900 p-2 rounded-lg " />
+                </label>
+            </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {#each appointments as { _id,clientname, date, hour, lapsetime }}
+                {#if filteredAppointments.length > 0}
+                {#each filteredAppointments as { _id, clientname, date, hour, lapsetime }}
                     <div class="bg-white flex flex-col items-center p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-blue-600 ">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m7.848 8.25 1.536.887M7.848 8.25a3 3 0 1 1-5.196-3 3 3 0 0 1 5.196 3Zm1.536.887a2.165 2.165 0 0 1 1.083 1.839c.005.351.054.695.14 1.024M9.384 9.137l2.077 1.199M7.848 15.75l1.536-.887m-1.536.887a3 3 0 1 1-5.196 3 3 3 0 0 1 5.196-3Zm1.536-.887a2.165 2.165 0 0 0 1.083-1.838c.005-.352.054-.695.14-1.025m-1.223 2.863 2.077-1.199m0-3.328a4.323 4.323 0 0 1 2.068-1.379l5.325-1.628a4.5 4.5 0 0 1 2.48-.044l.803.215-7.794 4.5m-2.882-1.664A4.33 4.33 0 0 0 10.607 12m3.736 0 7.794 4.5-.802.215a4.5 4.5 0 0 1-2.48-.043l-5.326-1.629a4.324 4.324 0 0 1-2.068-1.379M14.343 12l-2.882 1.664" />
                         </svg>
                         <h3 class="text-lg font-semibold mb-2 mt-2">{clientname}</h3>
-                        <p><strong>Fecha:</strong> {new Date(date).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                        <p><strong>Fecha:</strong> {new Date(date).toLocaleDateString('es-ES', { year: 'numeric', month: 'numeric', day: 'numeric' })}</p>
                         <p><strong>Hora:</strong> {hour}</p>
                         <p><strong>Duración:</strong> {lapsetime} min</p>
                         <button class="bg-red-700 text-white p-2 mt-4 rounded-lg" on:click={() => deleteAppointment(_id)}>Eliminar</button>
                     </div>
                 {/each}
+            {:else}
+                <p>No hay citas que coincidan con los filtros seleccionados.</p>
+            {/if}
             </div>
             <div>
                 <button 
@@ -273,15 +294,15 @@
             {/if}
             {#if activeTab === 'servicios'}
                 <h2 class="text-xl font-bold mb-4">Servicios</h2>
-                <div class="  flex flex-row p-1 gap-4 ">
+                <div class="  flex flex-col p-1 gap-2 ">
                     <button 
-                        class="bg-gray-900 text-white p-2 rounded-lg mt-4 w-1/2"
+                        class="bg-white text-gray-900 p-2 rounded-lg mt-4 border-4 border-double border-gray-900"
                         on:click={openServiceModal}>
                         Crear nuevo servicio
                     </button>
                     
                     <ServicesForm {barbershopid} show={showServiceModal} closeModal={closeServiceModal} />
-                    <button aria-label="editar dia"class="bg-gray-900 text-white p-2 rounded-lg mt-4 w-1/2"
+                    <button aria-label="editar dia"class="bg-white text-gray-900 p-2 rounded-lg border-double border-4 border-gray-900"
                     on:click={openCalendar} >
                     Añadir horario especial
                     </button>
@@ -314,7 +335,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-3">
                     {#each services as {_id, title,description,price }}
                         <div class="bg-white flex flex-col items-center p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-                            <div class="bg-gray-900 flex flex-row justify-around text-white p-1 w-full">
+                            <div class="bg-gray-900 flex flex-row justify-around text-white p-1 w-full rounded-lg">
                                 <h3 class="text-lg font-semibold mb-2 mt-2">{title}</h3>
                                  <p class="text-lg font-semibold mb-2 mt-2">{price}€</p>
                             </div>
@@ -360,9 +381,8 @@
                 <h2 class="text-xl font-bold mb-4">Peinados</h2>
                 <ul class="grid grid-cols-2 gap-4">
                     {#each haircuts as { images, style ,_id}}
-                        <li class="p-4 border shadow rounded">
+                        <li class="p-1 border-4 border-double border-gray-900 shadow rounded bg-white flex flex-col items-center">
                             <img src={images} alt={style} class="w-full h-32 object-cover rounded" />
-                            <p class="mt-2">{style}</p>
                             <button class="bg-red-700 text-white p-2 mt-4 rounded-lg" on:click={() => deleteHaircut(_id)}>Eliminar</button>
                         </li>
                     {/each}
