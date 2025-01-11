@@ -255,7 +255,7 @@
         {:else}
             {#if activeTab === 'appointments'}
             <h2 class="text-xl font-bold mb-4">Citas</h2>
-            <div class="flex flex-row mb-4">
+            <div class="flex flex-row mb-4 w-full">
                 <label class="text-center">
                      Fecha: 
                     <input type="date" bind:value={filterDate} class="border-2 border-gray-900 p-2 rounded-lg" />

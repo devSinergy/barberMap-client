@@ -169,12 +169,12 @@
     <section>
         {#if activeTab === 'info'}
         <div class="text-2xl text-center mt-4  font-serif font-semibold underline underline-offset-8">
-          <h2>Información</h2>
+          <h2 >Información</h2>
         </div>
         <div class="flex flex-col lg:flex-row">
             <div>
               <div class="w-full lg:w-1/2 p-4 text-center">
-                <h2 class="text-3xl font-semibold">{detailStore.name}</h2>
+                <h2 class="text-3xl font-semibold text-blue-500 poired" >{detailStore.name}</h2>
                 <p class="mt-4 text-xl">"{detailStore.slogan}"</p>
                 <p class="mt-2">{detailStore.addres},  {detailStore.postalcode}</p>
                 <div class="flex flex-col items-center ">
@@ -326,7 +326,7 @@
               <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4  p-2 bg-white">
                 {#each haircuts as haircut}
                   <div class="border-gray-900 rounded-lg p-2 text-center flex flex-col gap-4 mt-2  border-2">
-                      <p class="text-gray-900 ">Estilo :</p>
+                      <p class="text-blue-700 underline-offset-4 underline ">Estilo </p>
                       <p class="text-2xl text-gray-900 font-bold mt-[-20px]">
                          {haircut.style || 'No especificada'}
                       </p>
@@ -459,5 +459,9 @@
   white-space: nowrap;   /* Evita que el texto salte a otra línea */
   overflow: hidden;
   animation: text-move 10s linear infinite; /* Duración de 5s, repetición infinita */
+}
+
+.poired {
+  font-family: 'Poiret One', sans-serif;
 }
 </style>
