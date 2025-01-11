@@ -1,5 +1,5 @@
 <main>
-    <div class="card w-full h-full">
+    <div class="card w-screen h-screen">
         <div class="loader">
           <p>loading</p>
           <div class="words">

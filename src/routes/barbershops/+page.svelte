@@ -75,7 +75,7 @@
     const timeout = setTimeout(() => {
       isLoading = false;
       clearInterval(interval);
-    }, 15000);
+    }, 3000);
 
     // Limpieza de los intervalos si el componente se destruye
     onDestroy(() => {
