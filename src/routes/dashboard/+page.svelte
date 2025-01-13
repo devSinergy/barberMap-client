@@ -8,6 +8,7 @@
     import { getServices,updateServices,deleteService } from "$lib/comunications/endpoints/servicesRoutes.js";
     import { showReviews,deleteReviews } from "$lib/comunications/endpoints/reviewsRoutes";
     import { addEspecialDay } from "$lib/comunications/endpoints/calendarRoutes.js";
+    import { totalClients } from "$lib/comunications/endpoints/userRoutes.js";
     import { goto } from "$app/navigation";
     import AppoitmentsForm from "$lib/components/appointmentsForm/appoitmentsForm.svelte";
     import ServicesForm from "$lib/components/servicesForm/servicesForm.svelte";
@@ -31,6 +32,7 @@
     let reviews = [];
 
     let services = [];
+    let clients = [];
     let loading = true;
     let filterDate = ""; // Para almacenar el valor del input de fecha
     let filterHour = ""; // Para almacenar el valor del input de hora
@@ -43,7 +45,8 @@
         appointments = await showAppoitmens(barbershopid);
         haircuts = await getStoreHaircut(barbershopid);
         reviews = await showReviews(barbershopid);
-        services = await getServices(barbershopid)
+        services = await getServices(barbershopid);
+        clients = await totalClients(barbershopid)
     } catch (error) {
         console.error('Error fetching data:', error);
     } finally {
@@ -231,6 +234,15 @@
                 <li>
                     <button 
                         class="w-full p-1 text-left hover:bg-white hover:rounded-xl hover:text-black cursor-pointer underline underline-offset-8"
+                        class:selected={activeTab === 'clientes'}
+                        on:click={() => activeTab = 'clientes'}
+                        aria-pressed={activeTab === 'clientes'}>
+                        Clientes
+                    </button>
+                </li>
+                <li>
+                    <button 
+                        class="w-full p-1 text-left hover:bg-white hover:rounded-xl hover:text-black cursor-pointer underline underline-offset-8"
                         class:selected={activeTab === 'reviews'}
                         on:click={() => activeTab = 'reviews'}
                         aria-pressed={activeTab === 'reviews'}>
@@ -255,12 +267,12 @@
         {:else}
             {#if activeTab === 'appointments'}
             <h2 class="text-xl font-bold mb-4">Citas</h2>
-            <div class="flex flex-row mb-4 w-full">
-                <label class="text-center">
+            <div class="flex flex-col mb-4 w-full items-center gap-2">
+                <label class="text-center flex flex-col">
                      Fecha: 
                     <input type="date" bind:value={filterDate} class="border-2 border-gray-900 p-2 rounded-lg" />
                 </label>
-                <label class="text-center">
+                <label class="text-center flex flex-col">
                     Hora: 
                     <input type="time" bind:value={filterHour} class="border-2 border-gray-900 p-2 rounded-lg " />
                 </label>
@@ -285,7 +297,7 @@
             </div>
             <div>
                 <button 
-                    class="bg-gray-900 text-white p-2 rounded-lg mt-4 fixed bottom-4 right-4"
+                    class="bg-gray-900 text-white p-2 rounded-lg  fixed bottom-[60px] right-4"
                     on:click={openModal}>
                     Crear Nueva Cita
                 </button>
@@ -389,6 +401,35 @@
                 </ul>
             {/if}
 
+            {#if activeTab === 'clientes'}
+            <h2 class="text-xl font-bold mb-4">Clientes</h2>
+            <div class="overflow-x-auto mt-3 text-[8px]">
+                <table class="table-auto w-full border-collapse border border-gray-200">
+                    <thead>
+                        <tr class="bg-gray-700 text-white">
+                            <th class="border border-gray-300 px-4 py-2 text-left">Nombre</th>
+                            <th class="border border-gray-300 px-4 py-2 text-left">Movil</th>
+                            <th class="border border-gray-300 px-4 py-2 text-left">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {#each clients as {name, phonenumber}, index}
+                            <tr class="bg-gray-50">
+                                <td class="border border-gray-300 px-4 py-2">{name}</td>
+                                <td class="border border-gray-300 px-4 py-2">{phonenumber}</td>
+                                <td class="border border-gray-300 px-4 py-2">
+                                    <button
+                                        class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
+                                        on:click={() => deleteClient(index)}>
+                                        Eliminar
+                                    </button>
+                                </td>
+                            </tr>
+                        {/each}
+                    </tbody>
+                </table>
+            </div>
+            {/if}
             {#if activeTab === 'reviews'}
                 <h2 class="text-xl font-bold mb-4">Reseñas</h2>
                 <ul>

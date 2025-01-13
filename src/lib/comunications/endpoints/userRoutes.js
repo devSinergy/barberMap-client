@@ -14,3 +14,12 @@ export const createUser = async (formUser,barbershopid) =>{
         throw error
     }
 }
+
+export const totalClients = async (barbershopid) =>{
+    try {
+        const response = await apiUsers.get(`/${barbershopid}`)
+        return response.data
+    } catch (error) {
+        
+    }
+}

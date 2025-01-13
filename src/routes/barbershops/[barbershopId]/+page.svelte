@@ -19,6 +19,7 @@
         detailreviews = [],
         appoitmens = [],
         haircuts = [],
+        clients = [],
     } = data;
     import "/src/global.css";
     let activeTab = 'info';  
@@ -244,6 +245,20 @@
             <div class="w-full lg:w-1/2 p-4">
               <Carousel images={detailStore.images} />
             </div>
+            <div class="mt-4">
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-12 text-center">
+                    <h3 class="animate-charcter"> Nuestros Clientes:</h3>
+                  </div>
+                </div>
+              </div>
+              {#if clients.length === 0}
+                <p>No hay clientes para esta barberia</p>
+              {:else}
+                <p class="text-center font-mono text-2xl text-blue-600">{clients.length}</p>
+              {/if}
+            </div>
             <div>
               <h2 class="text-2xl font-bold text-center mb-6 mt-6  underline underline-offset-8">Reseñas</h2>
               {#if detailreviews.length === 0}
@@ -463,5 +478,34 @@
 
 .poired {
   font-family: 'Poiret One', sans-serif;
+}
+
+.animate-charcter
+{
+   text-transform: uppercase;
+  background-image: linear-gradient(
+    -225deg,
+    rgb(42, 0, 192) 0%,
+    #140ddb 29%,
+    #fe0d0d 67%,
+    #f40d0d 100%
+  );
+  background-size: auto auto;
+  background-clip: border-box;
+  background-size: 200% auto;
+  color: #fff;
+  background-clip: text;
+  text-fill-color: transparent;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textclip 4s linear infinite;
+  display: inline-block;
+      font-size: 20px;
+}
+
+@keyframes textclip {
+  to {
+    background-position: 200% center;
+  }
 }
 </style>
