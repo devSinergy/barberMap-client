@@ -20,7 +20,7 @@ export async function load({ params }) {
             totalClients(id)
             
         ]);
-        return { detailStore, services,calendar,reviews,detailreviews,appoitmens,clients };
+        return { detailStore, services,calendar,reviews,detailreviews,appoitmens,haircuts,clients };
     } catch (error) {
         console.error("Error al cargar los datos:", error);
         return { status: 500, error: "No se pudieron cargar los datos" };

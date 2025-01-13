@@ -249,7 +249,7 @@
               <div class="container">
                 <div class="row">
                   <div class="col-md-12 text-center">
-                    <h3 class="animate-charcter"> Nuestros Clientes:</h3>
+                    <h3 class="animate-charcter font-bold font-mono"> Nuestros Clientes</h3>
                   </div>
                 </div>
               </div>
@@ -500,7 +500,7 @@
   -webkit-text-fill-color: transparent;
   animation: textclip 4s linear infinite;
   display: inline-block;
-      font-size: 20px;
+      font-size: 25px;
 }
 
 @keyframes textclip {
