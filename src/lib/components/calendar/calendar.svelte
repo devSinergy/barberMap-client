@@ -2,23 +2,33 @@
 // @ts-nocheck
 
   import { selectedDate } from './calendarStore';
-  import { writable } from 'svelte/store';
+  import { writable,get } from 'svelte/store';
 
   // Para simplificar, generaremos un calendario de prueba
   let today = new Date();
   let currentMonth = writable(today.getMonth());
   let currentYear = writable(today.getFullYear());
-
+  
   // Función para seleccionar una fecha
   /**
    * @param {number | undefined} day
    */
-  function selectDate(day) {
-    const date = new Date($currentYear, $currentMonth, day);
-    selectedDate.set(date); // Actualiza la store
+   function selectDate(day) {
+    const year = get(currentYear);
+    const month = get(currentMonth);
+    const date = new Date(year, month, day);
+
+    const dd = String(date.getDate()).padStart(2, '0');
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const yyyy = String(date.getFullYear());
+
+    const formattedDate = `${dd}/${mm}/${yyyy}`;
+
+    selectedDate.set(formattedDate);
+    
   }
 
-  $: selected = $selectedDate ? $selectedDate.toDateString() : 'No hay fecha seleccionada';
+  $: selected = $selectedDate ?? 'No hay fecha seleccionada';
   // Generar los días del mes actual
   /**
    * @param {number} month

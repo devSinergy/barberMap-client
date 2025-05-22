@@ -1,54 +1,41 @@
 <script>
-   
-    /** @type {string[]} */
-    export let images = []; 
-     let currentIndex = 0;    
+// @ts-nocheck
 
-     const nextImage = () =>{
-        currentIndex = ( currentIndex + 1) % images.length;
-     };
+  import { onMount, onDestroy } from 'svelte';
 
-     const prevImage = () => {
-    currentIndex = (currentIndex - 1 + images.length) % images.length;
-     };
+  /** @type {string[]} */
+  export let images = []; 
+  let currentIndex = 0;    
+  let interval;
+
+  const nextImage = () => {
+      currentIndex = (currentIndex + 1) % images.length;
+  };
+
+  onMount(() => {
+      interval = setInterval(nextImage, 3000); // cambia cada 3 segundos
+  });
+
+  onDestroy(() => {
+      clearInterval(interval); // limpiar cuando se destruya el componente
+  });
 </script>
 <main>
-  <div class="relative">
-    <!-- Imagen del carrusel -->
-    <img
-      src={images[currentIndex]}
-      alt="Imagen del Carrusel"
-      class="w-full h-full object-cover rounded-lg shadow-lg"
-    />
+  <div class="relative w-full h-[400px] rounded-lg overflow-hidden shadow-lg">
+    <!-- Imagen -->
+    {#if images.length > 0}
+      <img
+        src={images[currentIndex]}
+        alt="Imagen del Carrusel"
+        class="w-full h-full object-cover transition-opacity duration-1000 ease-in-out"
+      />
+    {/if}
 
-    <!-- Botón para la izquierda -->
-    <button
-      on:click={prevImage}
-      class="absolute left-1 top-1/2 transform -translate-y-1/2 bg-gray-900 text-white p-2 rounded-full shadow hover:bg-gray-100 hover:text-gray-900"
-      aria-label="Imagen anterior"
-    >
-      <!-- Ícono izquierda -->
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-      </svg>
-      
-      
-      
-      
-    </button>
+    <!-- Capa oscura -->
+    <div class="absolute inset-0 bg-black bg-opacity-25 z-10"></div>
 
-    <!-- Botón para la derecha -->
-    <button
-      on:click={nextImage}
-      class="absolute right-1 top-1/2 transform -translate-y-1/2 bg-gray-900 text-white p-2 rounded-full shadow hover:bg-gray-100 hover:text-gray-900"
-      aria-label="Imagen siguiente"
-    >
-      <!-- Ícono derecha -->
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
-        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-      </svg>
-      
-      
-    </button>
+    <!-- Título encima -->
+    
   </div>
 </main>
+

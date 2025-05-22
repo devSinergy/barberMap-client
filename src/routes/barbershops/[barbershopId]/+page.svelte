@@ -20,30 +20,27 @@
         appoitmens = [],
         haircuts = [],
         clients = [],
+        barbers = [], 
     } = data;
     import "/src/global.css";
     let activeTab = 'info';  
     import Calendar from "$lib/components/calendar/calendar.svelte";
     import { selectedDate } from "$lib/components/calendar/calendarStore.js";
     
+    
     // @ts-ignore
     let selected;
     // @ts-ignore
     // @ts-ignore
     // @ts-ignore
-    $: selected = $selectedDate ? $selectedDate.toDateString() : 'No hay fecha seleccionada';
-    $: selectedDateFormatted = $selectedDate
-    // @ts-ignore
-    ? `${$selectedDate.getFullYear()}-${($selectedDate.getMonth() + 1).toString().padStart(2, '0')}-${$selectedDate.getDate().toString().padStart(2, '0')}`
-    : null;
-
+    $: selected = $selectedDate ?? 'No hay fecha seleccionada';
+    
+    
     $: filteredAppointments = Array.isArray(appoitmens)
-    ? appoitmens.filter((/** @type {{ date: string | number | Date; }} */ appointment) => {
-        const appointmentDate = new Date(appointment.date);
-        const formattedAppointmentDate = `${appointmentDate.getFullYear()}-${(appointmentDate.getMonth() + 1).toString().padStart(2, '0')}-${appointmentDate.getDate().toString().padStart(2, '0')}`;
-        return formattedAppointmentDate === selectedDateFormatted;
+  ? appoitmens.filter(appointment => {
+      return appointment.date === $selectedDate;
     })
-    : [];
+  : [];
     let showModal = false;
     /**
    * @type {null}
@@ -55,7 +52,9 @@
    
     let date = "";
     let hour = "";
-    const lapsetime = 30; // lapsetime por defecto siempre será 30
+    let serviceid = '';
+    let barberid ='';
+    const lapsetime = 3; // lapsetime por defecto siempre será 30
     let barbershopid = ""; // Será recogido desde la ruta
     let clientname = "";
 
@@ -102,17 +101,20 @@
 
     // Obtener barbershopid de la ruta
     const barbershopid = window.location.pathname.split('/')[2]; // Ajusta según cómo esté estructurada tu URL
-
+    const [year, month, day] = date.split('-');
+    const formattedDate = `${day}/${month}/${year}`;
     // Construir el objeto de la cita
     const appointmentData = {
-      barbershopid,
+      barberid,
+      serviceid,
       clientname: username, // Nombre del cliente obtenido desde el token
-      date,
+      date:formattedDate,
       hour,
-      lapsetime: 30, // lapsetime fijo en 30 minutos
+       
     };
+    
     // Enviar los datos al servidor
-    fetch('https://barbermap-server.onrender.com/appoitmens', {
+    fetch(`https://barbermap-server.onrender.com/appoitmens/${barbershopid}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -148,64 +150,66 @@
 <main  class="flex flex-col min-h-screen">
     <NavBar/>
     <div class="flex-1 container mx-auto mb-4">
-      <nav class="bg-gray-400 p-2 w-full  ">
+      <nav class="bg-black p-2 w-full  ">
       <ul class="flex justify-center flex-wrap space-x-6 gap-4  font-bold text-center lg:space-x-[300px] ">
           <li>
             <button 
-              class={activeTab === 'info' ? 'text-white' : 'text-black' } 
+              class={activeTab === 'info' ? 'text-white' : 'text-white' } 
               on:click={() => activeTab = 'info'}>Info</button>
           </li>
           <li>
             <button 
-              class={activeTab === 'services' ? 'text-white' : 'text-black' } 
+              class={activeTab === 'services' ? 'text-white' : 'text-white' } 
               on:click={() => activeTab = 'services'} >Servicios</button>
           </li>
           <li>
             <button 
-              class={activeTab === 'workers' ? 'text-white' : 'text-black'} 
+              class={activeTab === 'workers' ? 'text-white' : 'text-white'} 
               on:click={() => activeTab = 'dates'}>Calendario de citas</button>
           </li>
         </ul>
     </nav>
     <section>
         {#if activeTab === 'info'}
-        <div class="text-2xl text-center mt-4  font-serif font-semibold underline underline-offset-8">
-          <h2 >Información</h2>
-        </div>
         <div class="flex flex-col lg:flex-row">
             <div>
-              <div class="w-full lg:w-1/2 p-4 text-center">
-                <h2 class="text-3xl font-semibold text-blue-500 poired" >{detailStore.name}</h2>
-                <p class="mt-4 text-xl">"{detailStore.slogan}"</p>
-                <p class="mt-2">{detailStore.addres},  {detailStore.postalcode}</p>
-                <div class="flex flex-col items-center ">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 mt-4 text-green-600 vibrar">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
-                  </svg>                
-                <p class="mt-2">{detailStore.phonenumber}</p>
+              <div class="relative w-full h-full">
+                <!-- Carousel de imágenes con brillo bajo -->
+                <div class="h-full brightness-75">
+                  <Carousel images={detailStore.images} title={detailStore.name} />
                 </div>
               
-                {#if reviews && reviews.promedio}
-                <p class="text-sm text-white mt-4 flex justify-center items-center">
-                    <span class="ml-2 flex ">
-                        {#each Array(5) as _, index}
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="currentColor"
-                                viewBox="0 0 24 24"
-                                class="w-5 h-5 {index < Math.round(reviews.promedio) ? 'text-yellow-500' : 'text-gray-300'}"
-                            >
-                                <path
-                                    d="M12 .587l3.668 7.429 8.2 1.179-5.917 5.761 1.396 8.144L12 18.897l-7.347 3.873 1.396-8.144-5.917-5.761 8.2-1.179z"
-                                />
-                            </svg>
-                        {/each}
-                    </span>
-                </p>
-            {:else}
-                <p class="text-sm text-white mt-4">No hay reseñas disponibles.</p>
-              {/if}
-              </div> 
+                <!-- Contenido superpuesto encima del carrusel -->
+                <div class="absolute inset-0 flex flex-col mt-12 items-center text-white text-center px-4 ">
+                  <h1 class="text-4xl lg:text-5xl font-bold mb-2 drop-shadow-lg">{detailStore.name}</h1>
+                  <p class="text-xl italic mb-2 drop-shadow-md">"{detailStore.slogan}"</p>
+                  <div class="absolute bottom-10 w-full text-center">
+                    <p class="text-md mb-1">{detailStore.addres}, {detailStore.postalcode}</p>
+                    <div class="flex items-center mt-1 justify-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-400 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+                      </svg>
+                      <span>{detailStore.phonenumber}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="p-4 bg-white rounded-lg shadow-md">
+                <h1 class="text-2xl font-bold mb-4 text-gray-800 text-center">Barberos</h1>
+              
+                <div class="grid  grid-cols-2 lg:grid-cols-3">
+                  {#each barbers as barber}
+                    <div class="flex flex-col gap-2 items-center  p-3 bg-gray-50 rounded-lg shadow-sm hover:shadow-md transition">
+                      <img
+                        src={barber.image}
+                        alt={barber.name}
+                        class="w-[90px] h-[90px] rounded-full object-cover border-2 border-gray-300"
+                      />
+                      <p class="text-gray-700 font-bold">{barber.name}</p>
+                    </div>
+                  {/each}
+                </div>
+              </div>
               <div class="overflow-x-auto p-4 ">
                   <div class="p-2 rounded-md mb-3">
                       <p class="text-xl text-red-600 text-center font-bold text-animated">{calendar[0].especialday}</p>
@@ -242,9 +246,7 @@
                 </table>
               </div>
             </div>
-            <div class="w-full lg:w-1/2 p-4">
-              <Carousel images={detailStore.images} />
-            </div>
+            
             <div class="mt-4">
               <div class="container">
                 <div class="row">
@@ -388,6 +390,34 @@
               <div class="bg-white p-6 rounded-lg w-96" on:click|stopPropagation>
                 <h2 class="text-xl font-semibold text-gray-700 mb-4">Crear Cita</h2>
                 <form on:submit|preventDefault={crateDate}>
+                  <div class="mb-4">
+                    <label for="barberid" class="block text-sm font-medium text-gray-600">Barbero</label>
+                    <select
+                      id="barberid"
+                      bind:value={barberid}
+                      required
+                      class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="" disabled selected>Selecciona un Barbero</option>
+                      {#each barbers as barber}
+                        <option value={barber._id}>{barber.name}</option>
+                      {/each}
+                    </select>
+                  </div>
+                  <div class="mb-4">
+                    <label for="serviceid" class="block text-sm font-medium text-gray-600">Servicio</label>
+                    <select
+                      id="serviceid"
+                      bind:value={serviceid}
+                      required
+                      class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="" disabled selected>Selecciona un servicio</option>
+                      {#each services as service}
+                        <option value={service._id}>{service.title}</option>
+                      {/each}
+                    </select>
+                  </div>
                   <!-- Campo de Fecha -->
                   <div class="mb-4">
                     <label for="date" class="block text-sm font-medium text-gray-600">Fecha</label>
@@ -400,11 +430,7 @@
                     <input id="hour" type="time" bind:value={hour} step="1800" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required />
                   </div>
 
-                  <!-- Campo de Lapso de Tiempo (Fijo) -->
-                  <div class="mb-6">
-                    <label for="lapsetime" class="block text-sm font-medium text-gray-600">Lapso de tiempo (minutos)</label>
-                    <input id="lapsetime" type="number" value={lapsetime} disabled class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100 cursor-not-allowed" />
-                  </div>
+                 
 
                   <!-- Botones -->
                   <div class="flex justify-around mt-4">
@@ -421,20 +447,19 @@
           {/if}
           <Calendar />
           <div class="grid  grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4  w-[90%] ">
-           {#if filteredAppointments.length > 0}
-            {#each filteredAppointments.sort((a, b) => a.hour.localeCompare(b.hour)) as dates}
-              <div class="bg-white shadow-md rounded-lg p-4 flex flex-col gap-2 ">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 ml-10 text-blue-600 ">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="m7.848 8.25 1.536.887M7.848 8.25a3 3 0 1 1-5.196-3 3 3 0 0 1 5.196 3Zm1.536.887a2.165 2.165 0 0 1 1.083 1.839c.005.351.054.695.14 1.024M9.384 9.137l2.077 1.199M7.848 15.75l1.536-.887m-1.536.887a3 3 0 1 1-5.196 3 3 3 0 0 1 5.196-3Zm1.536-.887a2.165 2.165 0 0 0 1.083-1.838c.005-.352.054-.695.14-1.025m-1.223 2.863 2.077-1.199m0-3.328a4.323 4.323 0 0 1 2.068-1.379l5.325-1.628a4.5 4.5 0 0 1 2.48-.044l.803.215-7.794 4.5m-2.882-1.664A4.33 4.33 0 0 0 10.607 12m3.736 0 7.794 4.5-.802.215a4.5 4.5 0 0 1-2.48-.043l-5.326-1.629a4.324 4.324 0 0 1-2.068-1.379M14.343 12l-2.882 1.664" />
-                </svg>
-                <p class="font-bold text-xl">Hora: {dates.hour}</p>
-                <h3 class="text-lg text-gray-500">{dates.clientname}</h3>
-                <p class="text-sm text-gray-500">Duración: {dates.lapsetime} min</p>
-              </div>
+            {#if filteredAppointments.length > 0}
+            {#each filteredAppointments.sort((a, b) => (a.hour ?? '').localeCompare(b.hour ?? '')) as dates}
+            <div class="bg-white shadow-md rounded-lg p-4 flex flex-col gap-2 items-center">
+              <p class="font-bold text-xl text-blue-600">Hora: {dates.hour}</p>
+              <p class="text-sm text-gray-500">Fin: {dates.hourfinish}</p>
+              <p class="text-sm text-black font-bold flex items-center gap-2">Barber: {dates.barberid.name}</p>
+              <span class="w-3 h-3 bg-red-600 rounded-full inline-block"></span>
+                <span class="text-red-600 font-semibold text-sm">Ocupado</span>
+            </div>
             {/each}
-         {:else}
-          <p class="text-2xl ml-[50%] mt-5 w-full text-center">No hay citas para este día.</p>
-        {/if}
+          {:else}
+            <p class="text-2xl ml-[50%] mt-5 w-full text-center">No hay citas para este día.</p>
+          {/if}
           </div>
         </div>
         {/if} 

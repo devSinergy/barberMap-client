@@ -1,4 +1,6 @@
 <script>
+// @ts-nocheck
+
  import "/src/global.css";
   import { sendForm } from "$lib/comunications/endpoints/loginRoutes"; // Asegúrate de que la ruta sea correcta
   import { goto } from '$app/navigation';
@@ -11,6 +13,19 @@
   let loginTypeError = '';
   let showModal = false;
   let modalMessage = '';
+  let tokenUser = '';
+    
+  function decodeJWT(token) {
+    if (!token) return null;
+    try {
+      const payload = token.split('.')[1];
+      const decoded = atob(payload);
+      return JSON.parse(decoded);
+    } catch (err) {
+      console.error("Error al decodificar token:", err);
+      return null;
+    }
+  }
 
   const handleSubmit = async (/** @type {{ preventDefault: () => void; }} */ e) => {
       e.preventDefault();
@@ -46,30 +61,35 @@
           const formData = { phonenumber, password ,loginType};
 
           try {
-              // @ts-ignore
-              const response = await sendForm(formData);
+        const response = await sendForm(formData);
 
-              if (response) {
-                  modalMessage = `Bienvenido, ${loginType === 'barber' ? 'Barbero' : 'Cliente'}!`;
-                  showModal = true;
+        // Leer el token del localStorage
+        const tokenKey = loginType === 'cliente' ? 'authUser' : 'Authtoken';
+        const token = localStorage.getItem(tokenKey);
 
-                  // Redirigir después de un breve retraso para mostrar el modal
-                  setTimeout(() => {
-                      showModal = false;
+        if (token) {
+          const decoded = decodeJWT(token);
+          const nombre = decoded?.name || (loginType === 'barber' ? 'Barbero' : 'Cliente');
+          modalMessage = `Bienvenido, ${nombre}!`;
+          showModal = true;
 
-                      // Redirigir según el tipo de cuenta
-                      if (loginType === 'barber') {
-                          goto('/dashboard'); // Ruta para barberos
-                      } else if (loginType === 'cliente') {
-                          goto('/barbershops'); // Ruta para clientes
-                      }
-                  }, 3000);
-              } 
-          } catch (error) {
-              console.error("Error al enviar los datos", error);
-              alert("Hubo un error al enviar el formulario.");
-          }
+          setTimeout(() => {
+            showModal = false;
+            if (loginType === 'barber') {
+              goto('/dashboard');
+            } else if (loginType === 'cliente') {
+              goto(`/barbershops/${decoded.barberia}`);
+            }
+          }, 3000);
+        } else {
+          alert("No se pudo obtener el token.");
+        }
+      } catch (error) {
+        console.error("Error al enviar los datos", error);
+        alert("Hubo un error al enviar el formulario.");
       }
+    }
+      
   };
  
 </script>
