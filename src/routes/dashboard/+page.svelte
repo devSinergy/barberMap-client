@@ -8,7 +8,7 @@
     import { getServices,updateServices,deleteService } from "$lib/comunications/endpoints/servicesRoutes.js";
     import { showReviews,deleteReviews } from "$lib/comunications/endpoints/reviewsRoutes";
     import { addEspecialDay } from "$lib/comunications/endpoints/calendarRoutes.js";
-    import { totalClients } from "$lib/comunications/endpoints/userRoutes.js";
+    import { totalClients,deleteClient } from "$lib/comunications/endpoints/userRoutes.js";
     import { goto } from "$app/navigation";
     import AppoitmentsForm from "$lib/components/appointmentsForm/appoitmentsForm.svelte";
     import ServicesForm from "$lib/components/servicesForm/servicesForm.svelte";
@@ -47,6 +47,7 @@
         reviews = await showReviews(barbershopid);
         services = await getServices(barbershopid);
         clients = await totalClients(barbershopid)
+
     } catch (error) {
         console.error('Error fetching data:', error);
     } finally {
@@ -98,6 +99,17 @@
             
         }
     }
+
+    async function handleDeleteClient(clientid) {
+  try {
+    await deleteClient(clientid);
+    clients = clients.filter(client => client._id !== clientid);
+    alert('Usuario eliminado correctamente')
+  } catch (error) {
+    alert('Error al eliminar el cliente');
+    console.error(error);
+  }
+}
 
     const openEditModal = (service) => {
         // Rellenamos el formulario con los datos del servicio a editar
@@ -175,10 +187,16 @@
         showModal = false;
     };
 
-    $: filteredAppointments = appointments.filter(app => {
-        return (!filterDate || new Date(app.date).toISOString().split('T')[0] === filterDate) &&
-               (!filterHour || app.hour === filterHour);
-    });
+    function convertToISO(dateStr) {
+  const [day, month, year] = dateStr.split('/');
+  return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+}
+
+$: filteredAppointments = appointments.filter(app => {
+  const appDateISO = convertToISO(app.date); // convierte el campo a formato ISO
+  return (!filterDate || appDateISO === filterDate) &&
+         (!filterHour || app.hour === filterHour);
+});
 </script>
 
 <main >
@@ -279,15 +297,16 @@
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 {#if filteredAppointments.length > 0}
-                {#each filteredAppointments as { _id, clientname, date, hour, lapsetime }}
+                {#each filteredAppointments as { _id, clientname, date, hour, hourfinish, barberid }}
                     <div class="bg-white flex flex-col items-center p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-blue-600 ">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m7.848 8.25 1.536.887M7.848 8.25a3 3 0 1 1-5.196-3 3 3 0 0 1 5.196 3Zm1.536.887a2.165 2.165 0 0 1 1.083 1.839c.005.351.054.695.14 1.024M9.384 9.137l2.077 1.199M7.848 15.75l1.536-.887m-1.536.887a3 3 0 1 1-5.196 3 3 3 0 0 1 5.196-3Zm1.536-.887a2.165 2.165 0 0 0 1.083-1.838c.005-.352.054-.695.14-1.025m-1.223 2.863 2.077-1.199m0-3.328a4.323 4.323 0 0 1 2.068-1.379l5.325-1.628a4.5 4.5 0 0 1 2.48-.044l.803.215-7.794 4.5m-2.882-1.664A4.33 4.33 0 0 0 10.607 12m3.736 0 7.794 4.5-.802.215a4.5 4.5 0 0 1-2.48-.043l-5.326-1.629a4.324 4.324 0 0 1-2.068-1.379M14.343 12l-2.882 1.664" />
                         </svg>
-                        <h3 class="text-lg font-semibold mb-2 mt-2">{clientname}</h3>
-                        <p><strong>Fecha:</strong> {new Date(date).toLocaleDateString('es-ES', { year: 'numeric', month: 'numeric', day: 'numeric' })}</p>
-                        <p><strong>Hora:</strong> {hour}</p>
-                        <p><strong>Duración:</strong> {lapsetime} min</p>
+                        <h3 class="text-lg font-semibold mb-2 mt-2">Barber: {barberid.name}</h3>
+                        <p><strong>Cliente:</strong> {clientname}</p>
+                        <p><strong>Fecha:</strong> {date}</p>
+                        <p><strong>Inicio:</strong> {hour}</p>
+                        <p><strong>Fin:</strong> {hourfinish}</p>
                         <button class="bg-red-700 text-white p-2 mt-4 rounded-lg" on:click={() => deleteAppointment(_id)}>Eliminar</button>
                     </div>
                 {/each}
@@ -297,7 +316,7 @@
             </div>
             <div>
                 <button 
-                    class="bg-gray-900 text-white p-2 rounded-lg  fixed bottom-[60px] right-4"
+                    class="bg-gray-900 text-white p-2 rounded-lg  fixed bottom-[60px] right-4 vibrar"
                     on:click={openModal}>
                     Crear Nueva Cita
                 </button>
@@ -413,14 +432,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {#each clients as {name, phonenumber}, index}
+                        {#each clients as client}
                             <tr class="bg-gray-50">
-                                <td class="border border-gray-300 px-4 py-2">{name}</td>
-                                <td class="border border-gray-300 px-4 py-2">{phonenumber}</td>
+                                <td class="border border-gray-300 px-4 py-2">{client.name}</td>
+                                <td class="border border-gray-300 px-4 py-2">{client.phonenumber}</td>
                                 <td class="border border-gray-300 px-4 py-2">
                                     <button
                                         class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
-                                        on:click={() => deleteClient(index)}>
+                                        on:click={() => handleDeleteClient(client._id)}>
                                         Eliminar
                                     </button>
                                 </td>
@@ -452,3 +471,30 @@
     
     <Footer />
 </main>
+<style>
+    /* Animación de vibración */
+    @keyframes vibracion {
+      0% { transform: translateY(0); }
+        25% { transform: translateY(-10px); }
+        50% { transform: translateY(0); }
+        75% { transform: translateY(-7px); }
+        100% { transform: translateY(0); }
+    }
+  
+    /* Aplica la animación */
+    .vibrar {
+      animation: vibracion 3s ease-in-out infinite;
+    }
+  
+    @keyframes text-move {
+    0% {
+      transform: translateX(100%);
+    }
+    50% {
+      transform: translateX(-50%);
+    }
+    100% {
+      transform: translateX(-1%);
+    }
+  }
+  </style>

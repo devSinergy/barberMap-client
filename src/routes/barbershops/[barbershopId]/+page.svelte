@@ -57,8 +57,9 @@
     const lapsetime = 3; // lapsetime por defecto siempre será 30
     let barbershopid = ""; // Será recogido desde la ruta
     let clientname = "";
-
     let showDateModal = false;
+    let barberModal = false;
+    let selectedBarber = null;
 
 // Abrir modal
     function openModal() {
@@ -180,13 +181,13 @@
                 </div>
               
                 <!-- Contenido superpuesto encima del carrusel -->
-                <div class="absolute inset-0 flex flex-col mt-12 items-center text-white text-center px-4 ">
+                <div class="absolute inset-0 flex flex-col mt-10 items-center text-white text-center px-4 ">
                   <h1 class="text-4xl lg:text-5xl font-bold mb-2 drop-shadow-lg">{detailStore.name}</h1>
                   <p class="text-xl italic mb-2 drop-shadow-md">"{detailStore.slogan}"</p>
                   <div class="absolute bottom-10 w-full text-center">
                     <p class="text-md mb-1">{detailStore.addres}, {detailStore.postalcode}</p>
                     <div class="flex items-center mt-1 justify-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-400 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-green-500 mr-1 " fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
                       </svg>
                       <span>{detailStore.phonenumber}</span>
@@ -196,10 +197,15 @@
               </div>
               <div class="p-4 bg-white rounded-lg shadow-md">
                 <h1 class="text-2xl font-bold mb-4 text-gray-800 text-center">Barberos</h1>
-              
                 <div class="grid  grid-cols-2 lg:grid-cols-3">
                   {#each barbers as barber}
-                    <div class="flex flex-col gap-2 items-center  p-3 bg-gray-50 rounded-lg shadow-sm hover:shadow-md transition">
+                    <div
+                      class="flex flex-col gap-2 items-center p-3 bg-gray-50 rounded-lg shadow-sm hover:shadow-md transition cursor-pointer"
+                      on:click={() => {
+                        selectedBarber = barber;
+                        barberModal = true;
+                      }}
+                    >
                       <img
                         src={barber.image}
                         alt={barber.name}
@@ -210,6 +216,36 @@
                   {/each}
                 </div>
               </div>
+              {#if barberModal && selectedBarber}
+              <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                <div class="bg-white rounded-lg p-6 max-w-md w-full relative shadow-lg">
+                  <!-- Botón para cerrar -->
+                  <button
+                    class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl"
+                    on:click={() => barberModal = false}
+                  >
+                    &times;
+                  </button>
+
+                  <div class="flex flex-col items-center gap-4">
+                    <img
+                      src={selectedBarber.image}
+                      alt={selectedBarber.name}
+                      class="w-auto h-[300px] object-cover border-4 border-gray-300"
+                    />
+                    <h2 class="text-xl font-bold text-gray-800">
+                      {selectedBarber.name} {selectedBarber.lastname}
+                    </h2>
+                    <p class="text-gray-600 text-center">
+                      Experiencia: {selectedBarber.experience} años
+                    </p>
+                    <p class="text-gray-600 text-center flex items-center justify-center gap-2">
+                      👍 {selectedBarber.likes} 
+                    </p>
+                  </div>
+                </div>
+              </div>
+            {/if}
               <div class="overflow-x-auto p-4 ">
                   <div class="p-2 rounded-md mb-3">
                       <p class="text-xl text-red-600 text-center font-bold text-animated">{calendar[0].especialday}</p>
@@ -296,12 +332,23 @@
         <div class="text-2xl text-center mt-4 mb-4 font-serif font-semibold underline underline-offset-8">
           <h2>Servicios</h2>
         </div>
-        <div class="flex flex-wrap justify-center lg:justify-start gap-6 mt-6 px-4">
+        <div class="flex flex-col justify-center lg:justify-start gap-6 mt-6 px-4">
           {#each services as service}
             <div class="bg-white shadow-lg rounded-lg overflow-hidden w-full sm:w-64 ">
               <!-- Título -->
               <div class="bg-black text-white text-center py-2 font-bold">
                <p> {service.title}</p> 
+              </div>
+              <div class="p-2  flex flex-row justify-around items-center">
+                <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-green-600 ">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-yellow-600 ">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+                </svg> -->
+                <p class="text-2xl font-bold text-blue-900 text-center">
+                  {service.price}€
+                </p>
               </div>
               <!-- Contenido de la tarjeta -->
               <div class="p-4">
@@ -310,23 +357,13 @@
                 </p>
                 
               </div>
-              <div class="p-2 mt-[-10px] flex flex-row justify-around items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-green-600 vibrar">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
-                </svg>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-yellow-600 vibrar">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
-                </svg>
-                <p class="text-lg font-semibold text-gray-900 text-center">
-                  {service.price}€
-                </p>
-              </div>
+              
             </div>
             <button
             on:click={() => (showModal = true)}
-            class="fixed bottom-[190px] right-6 bg-gray-900 hover:bg-gray-900 text-white font-bold py-3 px-6 rounded-full shadow-lg"
+            class="fixed bottom-[190px] right-2 bg-gray-900 hover:bg-gray-900 text-white  font-bold  w-[80px] h-[80px] rounded-full shadow-lg vibrar"
             >
-            Ver Peinados
+             Peinados
           </button>
           <!-- Modal -->
           {#if showModal}

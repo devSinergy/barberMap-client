@@ -31,8 +31,8 @@ export const deleteApppoitmens = async (id) => {
 export const createAppoitmens = async(formData, barbershopid) =>{
     try {
         const token = localStorage.getItem('Authtoken');
-        const payload = {...formData,barbershopid}
-        const response = await apiAppoitmens.post('/',payload, {
+        const payload = {...formData}
+        const response = await apiAppoitmens.post(`${barbershopid}`,payload, {
             headers: {
                 authorization: `Bearer ${token}`, // Incluye el token en los headers
             },

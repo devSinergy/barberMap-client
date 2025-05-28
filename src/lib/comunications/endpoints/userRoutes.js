@@ -23,3 +23,12 @@ export const totalClients = async (barbershopid) =>{
         
     }
 }
+
+export const deleteClient = async (clientid) =>{
+    try {
+        const response = await apiUsers.delete(`/clients/${clientid}`)
+        return response.data
+    } catch (error) {
+        throw error
+    }
+}
