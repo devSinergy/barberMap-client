@@ -11,7 +11,6 @@
     import { totalClients,deleteClient } from "$lib/comunications/endpoints/userRoutes.js";
     import { goto } from "$app/navigation";
     import AppoitmentsForm from "$lib/components/appointmentsForm/appoitmentsForm.svelte";
-    import ServicesForm from "$lib/components/servicesForm/servicesForm.svelte";
      import UserForm from "$lib/components/createuserForm/userForm.svelte";
     
     export let data;
@@ -326,13 +325,7 @@ $: filteredAppointments = appointments.filter(app => {
             {#if activeTab === 'servicios'}
                 <h2 class="text-xl font-bold mb-4">Servicios</h2>
                 <div class="  flex flex-col p-1 gap-2 ">
-                    <button 
-                        class="bg-white text-gray-900 p-2 rounded-lg mt-4 border-4 border-double border-gray-900"
-                        on:click={openServiceModal}>
-                        Crear nuevo servicio
-                    </button>
                     
-                    <ServicesForm {barbershopid} show={showServiceModal} closeModal={closeServiceModal} />
                     <button aria-label="editar dia"class="bg-white text-gray-900 p-2 rounded-lg border-double border-4 border-gray-900"
                     on:click={openCalendar} >
                     Añadir horario especial
@@ -375,7 +368,7 @@ $: filteredAppointments = appointments.filter(app => {
                                 <button class="bg-blue-700 text-white p-2 mt-4 rounded-lg" on:click={() => openEditModal({ _id, title, description, price })}>
                                 Editar
                             </button>
-                            <button on:click={() => deleteServices(_id)} class="bg-red-700 text-white p-2 mt-4 rounded-lg" >Eliminar</button>  
+                            <!-- <button on:click={() => deleteServices(_id)} class="bg-red-700 text-white p-2 mt-4 rounded-lg" >Eliminar</button>   -->
                             </div>
                           
                         </div>

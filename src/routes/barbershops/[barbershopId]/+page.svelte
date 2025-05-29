@@ -172,7 +172,7 @@
     </nav>
     <section>
         {#if activeTab === 'info'}
-        <div class="flex flex-col lg:flex-row">
+        <div class="flex flex-col lg:flex-col ">
             <div>
               <div class="relative w-full h-full">
                 <!-- Carousel de imágenes con brillo bajo -->
