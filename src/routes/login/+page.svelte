@@ -84,10 +84,10 @@
             }
           }, 3000);
         } else {
-          alert("No se pudo obtener el token.");
+          alert("Revisa tus datos de acceso.");
         }
       } catch (error) {
-        console.error("Error al enviar los datos", error);
+        
         alert("Hubo un error al enviar el formulario.");
       }
     }

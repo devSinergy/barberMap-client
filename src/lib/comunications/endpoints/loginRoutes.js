@@ -34,7 +34,7 @@ export const sendForm = async (/** @type {{ phonenumber: Number; password: strin
             // Devolver los datos de la respuesta (si es necesario)
             return response.json(); // O response.data si prefieres obtener los datos directamente
         } else {
-            console.error('Error en la solicitud:', response.statusText);
+            
         }
     } catch (error) {
         console.error('Error al enviar el formulario:', error);
