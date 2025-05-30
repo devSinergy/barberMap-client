@@ -1,18 +1,17 @@
 <script>
     import { createUser } from "$lib/comunications/endpoints/userRoutes";
-    export let barbershopid
     export let showUser = false
     export let close
-    let formUser = {name:'',phonenumber:'',password:''}
+    let formUser = {name:'',phonenumber:'',password:'',storePhoneNumber:''}
 
     const addUser = async() =>{
-        if(!formUser.name || !formUser.phonenumber || !formUser.password){
+        if(!formUser.name || !formUser.phonenumber || !formUser.password || !formUser.storePhoneNumber){
             alert("Por favor, completa todos los campos.");
             return;
         }
         try {
-            const response = await createUser(formUser,barbershopid);
-            formUser = {name:'',phonenumber:'',password:''}
+            const response = await createUser(formUser);
+            formUser = {name:'',phonenumber:'',password:'',storePhoneNumber:''}
             const message = response.message;
             close()
             alert(message)
@@ -32,7 +31,7 @@
             </button>
 
             <h2 class="text-xl font-bold mb-4 text-center text-black">Crear Nuevo Usuario</h2>
-            <form on:submit|preventDefault={() => addUser()} class="space-y-4 text-black">
+            <form on:submit|preventDefault={() => addUser()} class="space-y-4 text-black flex flex-col">
                 <label>
                     Nombre del Cliente:
                     <input type="text" bind:value={formUser.name} placeholder="Nombre del cliente" class="border rounded p-2 w-full mt-1" />
@@ -45,7 +44,11 @@
                     Contraseña
                     <input type="password" bind:value={formUser.password}  placeholder="*******" class="border rounded p-2 w-full mt-1" />
                 </label>
-                <button type="submit" class="bg-gray-900 text-white p-2 mt-4 rounded-lg">Añadir usuario</button>
+                <label>
+                    Telefono De la barberia
+                    <input type="number" bind:value={formUser.storePhoneNumber}  placeholder="Telefono de la barberia" class="border rounded p-2 w-full mt-1" />
+                </label>
+                <button type="submit" class="bg-green-700 text-white p-2 mt-4 rounded-lg items-center">Crear mi cuenta</button>
             </form>
         </div>
     </div>

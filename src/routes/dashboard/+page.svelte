@@ -11,7 +11,7 @@
     import { totalClients,deleteClient } from "$lib/comunications/endpoints/userRoutes.js";
     import { goto } from "$app/navigation";
     import AppoitmentsForm from "$lib/components/appointmentsForm/appoitmentsForm.svelte";
-     import UserForm from "$lib/components/createuserForm/userForm.svelte";
+
     
     export let data;
     let editForm = {title:'',description:'',price:''}
@@ -21,7 +21,7 @@
     let showModal = false;
     let showEditModal = false;
     let showServiceModal = false;
-    let showUserModal = false;
+    
     let showCalendarModal = false;
     // @ts-ignore
     let appointments = [];
@@ -129,14 +129,6 @@
         showServiceModal = false;
     }
 
-    const openUserModal = () =>{
-        showUserModal = true;
-    }
-
-    const closeUserModal = () =>{
-        showUserModal = false;
-    }
-
     const openCalendar = () =>{
         showCalendarModal = true;
     }
@@ -203,16 +195,7 @@ $: filteredAppointments = appointments.filter(app => {
        <aside class="w-1/4 bg-gray-900 text-white p-4">
         <nav>
             <ul class="flex flex-col gap-6 ">
-                <li>
-                    <UserForm {barbershopid} showUser={showUserModal} close={closeUserModal}/>
-                    <button on:click={openUserModal} aria-label="user">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 ml-4">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
-                          </svg>
-                          
-                    </button>
-                    
-                </li>
+               
                 <li>
                     <button on:click={goto(`/barbershops/${barbershopid}`)}
                     aria-label="goto">

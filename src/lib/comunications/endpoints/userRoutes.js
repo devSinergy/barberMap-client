@@ -1,14 +1,10 @@
 // @ts-nocheck
 import apiUsers from "../axiosUser";
 
-export const createUser = async (formUser,barbershopid) =>{
+export const createUser = async (formUser) =>{
     try {
-        const token = localStorage.getItem('Authtoken');
-        const response = await apiUsers.post(`/${barbershopid}`,formUser,{
-            headers: {
-                authorization: `Bearer ${token}`, // Incluye el token en los headers
-            },
-        })
+        
+        const response = await apiUsers.post('/register',formUser)
         return response.data
     } catch (error) {
         throw error

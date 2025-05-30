@@ -21,7 +21,7 @@
   });
 </script>
 <main>
-  <div class="relative w-full h-[400px] rounded-lg overflow-hidden shadow-lg">
+  <div class="relative w-full h-[400px]  overflow-hidden shadow-lg">
     <!-- Imagen -->
     {#if images.length > 0}
       <img

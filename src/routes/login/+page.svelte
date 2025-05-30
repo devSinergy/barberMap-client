@@ -4,6 +4,8 @@
  import "/src/global.css";
   import { sendForm } from "$lib/comunications/endpoints/loginRoutes"; // Asegúrate de que la ruta sea correcta
   import { goto } from '$app/navigation';
+  import UserForm from "$lib/components/createuserForm/userForm.svelte";
+  let showUserModal = false;
   let loginBackground = "/images/backgrounds/fondologin.jpg";
   let phonenumber = '';
   let password = '';
@@ -91,6 +93,14 @@
     }
       
   };
+
+  const openUserModal = () =>{
+        showUserModal = true;
+    }
+
+    const closeUserModal = () =>{
+        showUserModal = false;
+    }
  
 </script>
 
@@ -177,6 +187,12 @@
               </button>
           </div>
       </form>
+  </div>
+  <div class="h-1/2 flex items-center justify-center bg-white mb-6">
+    <UserForm  showUser={showUserModal} close={closeUserModal}/>
+                    <button class="bg-green-600 p-2 rounded-md w-[87%] text-white font-bold" on:click={openUserModal} aria-label="user">
+                     Registrate                          
+                    </button>
   </div>
 
   <!-- Modal -->

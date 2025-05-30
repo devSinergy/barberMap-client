@@ -51,7 +51,7 @@
 
   .steam1 {
     background: linear-gradient(0deg, #000, #272727);
-    width: 23.5em;
+    width: 22em;
     height: 21.6em;
   }
   
@@ -131,10 +131,10 @@
   --bg-color: #212121;
   background-color: var(--bg-color);
   padding: 1rem 2rem;
-  border-radius: 1.25rem;
+  
 }
 .loader {
-  color: rgb(124, 124, 124);
+  color: rgb(218, 227, 220);
   font-family: "Poppins", sans-serif;
   font-weight: 500;
   font-size: 25px;
