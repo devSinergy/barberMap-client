@@ -48,6 +48,19 @@
                     Telefono De la barberia
                     <input type="number" bind:value={formUser.storePhoneNumber}  placeholder="Telefono de la barberia" class="border rounded p-2 w-full mt-1" />
                 </label>
+                <label class="flex items-start gap-2 text-sm">
+                    <input 
+                        type="checkbox" 
+                        required 
+                        class="mt-1"
+                    />
+                    <span>
+                        He leído y acepto los 
+                        <a href="/terms" target="_blank" class="text-blue-600 underline hover:text-blue-800">
+                            términos y condiciones
+                        </a>
+                    </span>
+                </label>
                 <button type="submit" class="bg-green-700 text-white p-2 mt-4 rounded-lg items-center">Crear mi cuenta</button>
             </form>
         </div>

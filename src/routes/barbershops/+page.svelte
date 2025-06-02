@@ -61,7 +61,9 @@
   onMount(() => {
   if (data.barberShops && data.barberShops.length > 0) {
     filteredBarberShops = [...data.barberShops];
-    isLoading = false;
+    setTimeout(() => {
+      isLoading = false;
+    }, 2000);
   } else {
     // Usar setInterval y setTimeout como ya tenías, o directamente aplicar un filtro reactivo
     const interval = setInterval(() => {
@@ -75,7 +77,7 @@
     const timeout = setTimeout(() => {
       isLoading = false;
       clearInterval(interval);
-    }, 15000);
+    }, 2000);
 
     // Limpieza de los intervalos si el componente se destruye
     onDestroy(() => {
@@ -97,7 +99,7 @@
     
     <section class="p-4 bg-white">
         <div>
-          <img src="{barbershopImg}" alt="barbershopbg" class="h-[20vh] ml-[14%]">
+          <img src="{barbershopImg}" alt="barbershopbg" class="h-[20vh] ml-[20%]">
         </div>
         <form class="mb-6 mt-6 grid grid-cols-2 gap-6 items-start bg-white p-4 rounded-lg shadow-md lg:gap-[200px] lg:flex-row">
             

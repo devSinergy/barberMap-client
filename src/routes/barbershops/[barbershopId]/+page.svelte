@@ -187,9 +187,9 @@
 
               <!-- Contenido superpuesto encima del carrusel -->
               <div
-                class="absolute inset-0 flex flex-col mt-10 items-center text-white text-center px-4"
+                class="absolute inset-0 flex flex-col mt-4 items-center text-white text-center px-4"
               >
-                <h1 class="text-4xl lg:text-5xl font-bold mb-2 drop-shadow-lg">
+                <h1 class="text-5xl lg:text-5xl font-bold  drop-shadow-lg">
                   {detailStore.name}
                 </h1>
                 <p class="text-xl italic mb-2 drop-shadow-md">
