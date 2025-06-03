@@ -50,7 +50,7 @@
       try {
         await createAppoitmens(formData, barbershopid);
         formData = { clientname: '', date: '', hour: '', barberid: '', serviceid: '' };
-        
+        alert('Has creado una nueva cita')
         closeModal();
       } catch (error) {
         errorCita = error.response.data.message

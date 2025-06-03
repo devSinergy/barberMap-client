@@ -42,3 +42,21 @@ export const createAppoitmens = async(formData, barbershopid) =>{
         throw error
     }
 }
+
+export const confirmAppoitmen = async(id,status) =>{
+    try {
+        const token = localStorage.getItem('Authtoken'); // Obtén el token del localStorage
+        const response = await apiAppoitmens.put(`/${id}`,
+        {status},
+        {
+            
+            headers: {
+                authorization: `Bearer ${token}`, // Incluye el token en los headers
+            },
+        });
+        const message = response.data.message;
+        return message;
+    } catch (error) {
+        throw error
+    }
+}

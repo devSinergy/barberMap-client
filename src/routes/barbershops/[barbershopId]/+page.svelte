@@ -82,7 +82,9 @@
   }
 
   const today = new Date();
-  const minDate = today.toISOString().split("T")[0];
+const tomorrow = new Date(today);
+tomorrow.setDate(today.getDate() + 1);
+const minDate = tomorrow.toISOString().split("T")[0];
 
   function crateDate() {
     try {
@@ -597,6 +599,8 @@
                       id="hour"
                       type="time"
                       bind:value={hour}
+                      min="09:00"
+                      max="21:30"
                       class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                       required
                     />
@@ -666,10 +670,15 @@
                   >
                     Barber: {dates.barberid.name}
                   </p>
-                  <span class="w-3 h-3 bg-red-600 rounded-full inline-block"
-                  ></span>
-                  <span class="text-red-600 font-semibold text-sm">Ocupado</span
-                  >
+                  {#if dates.status === 'pendiente'}
+                  <span class="w-3 h-3 bg-yellow-400 rounded-full inline-block"></span>
+                  <span class="text-yellow-600 font-semibold text-sm">Cita pendiente</span>
+                {:else if dates.status === 'confirmada'}
+                  <span class="w-3 h-3 bg-green-500 rounded-full inline-block"></span>
+                  <span class="text-green-600 font-semibold text-sm">Cita confirmada</span>
+                  <span class="w-3 h-3 bg-red-600 rounded-full inline-block"></span>
+                  <span class="text-red-600 font-semibold text-sm">Ocupado</span>
+                {/if}
                 </div>
               {/each}
             {:else}
