@@ -82,9 +82,9 @@
   }
 
   const today = new Date();
-const tomorrow = new Date(today);
-tomorrow.setDate(today.getDate() + 1);
-const minDate = tomorrow.toISOString().split("T")[0];
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+  const minDate = tomorrow.toISOString().split("T")[0];
 
   function crateDate() {
     try {
@@ -191,7 +191,7 @@ const minDate = tomorrow.toISOString().split("T")[0];
               <div
                 class="absolute inset-0 flex flex-col mt-4 items-center text-white text-center px-4"
               >
-                <h1 class="text-5xl lg:text-5xl font-bold  drop-shadow-lg">
+                <h1 class="text-5xl lg:text-5xl font-bold drop-shadow-lg">
                   {detailStore.name}
                 </h1>
                 <p class="text-xl italic mb-2 drop-shadow-md">
@@ -216,7 +216,7 @@ const minDate = tomorrow.toISOString().split("T")[0];
                         d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"
                       />
                     </svg>
-                    <span>{detailStore.phonenumber}</span>
+                    <span class="font-bold">{detailStore.phonenumber}</span>
                   </div>
                 </div>
               </div>
@@ -506,8 +506,16 @@ const minDate = tomorrow.toISOString().split("T")[0];
           >
             Citas
           </h2>
-          <p class="text-gray-600 mb-2 mt-2 p-4 text-center">
-            Aquí puedes ver información y disponibilidad de horas
+          <p class="text-red-600 font-bold mb-2 mt-2 p-4 text-center text-[14px]">
+            Aquí puedes consultar la información y disponibilidad de horarios.
+            Recuerda que tu cita deberá ser confirmada por el establecimiento.
+            Para solicitar una cita es necesario estar registrado como usuario,
+            lo que nos permite garantizar la veracidad de las reservas y evitar
+            solicitudes ficticias. Agradecemos tu comprensión y confianza. Ante
+            cualquier duda, no dudes en <a
+              href="/contacto"
+              class="underline text-blue-700 hover:text-red-800">contactarnos</a
+            >.
           </p>
           <div>
             <button
@@ -670,15 +678,25 @@ const minDate = tomorrow.toISOString().split("T")[0];
                   >
                     Barber: {dates.barberid.name}
                   </p>
-                  {#if dates.status === 'pendiente'}
-                  <span class="w-3 h-3 bg-yellow-400 rounded-full inline-block"></span>
-                  <span class="text-yellow-600 font-semibold text-sm">Cita pendiente</span>
-                {:else if dates.status === 'confirmada'}
-                  <span class="w-3 h-3 bg-green-500 rounded-full inline-block"></span>
-                  <span class="text-green-600 font-semibold text-sm">Cita confirmada</span>
-                  <span class="w-3 h-3 bg-red-600 rounded-full inline-block"></span>
-                  <span class="text-red-600 font-semibold text-sm">Ocupado</span>
-                {/if}
+                  {#if dates.status === "pendiente"}
+                    <span
+                      class="w-3 h-3 bg-yellow-400 rounded-full inline-block"
+                    ></span>
+                    <span class="text-yellow-600 font-semibold text-sm"
+                      >Cita pendiente</span
+                    >
+                  {:else if dates.status === "confirmada"}
+                    <span class="w-3 h-3 bg-green-500 rounded-full inline-block"
+                    ></span>
+                    <span class="text-green-600 font-semibold text-sm"
+                      >Cita confirmada</span
+                    >
+                    <span class="w-3 h-3 bg-red-600 rounded-full inline-block"
+                    ></span>
+                    <span class="text-red-600 font-semibold text-sm"
+                      >Ocupado</span
+                    >
+                  {/if}
                 </div>
               {/each}
             {:else}
@@ -735,7 +753,7 @@ const minDate = tomorrow.toISOString().split("T")[0];
     display: inline-block; /* Para asegurarse de que el movimiento se aplique correctamente */
     white-space: nowrap; /* Evita que el texto salte a otra línea */
     overflow: hidden;
-    animation: text-move 10s linear infinite; /* Duración de 5s, repetición infinita */
+    animation: text-move 20s linear infinite; /* Duración de 5s, repetición infinita */
   }
 
   .poired {

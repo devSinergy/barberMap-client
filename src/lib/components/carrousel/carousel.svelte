@@ -32,7 +32,7 @@
     {/if}
 
     <!-- Capa oscura -->
-    <div class="absolute inset-0 bg-black bg-opacity-25 z-10"></div>
+    <div class="absolute inset-0   z-10"></div>
 
     <!-- Título encima -->
     
